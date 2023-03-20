@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import Input from '../../common/Input';
@@ -93,27 +93,32 @@ function CreateCourse({ onButtonClick, createNewCourse, newAuthorList }) {
 			return;
 		}
 
-		const listAuthors = [...authorList, newAuthor];
-		setAuthorList(listAuthors);
+		setAuthorList([...authorList, newAuthor]);
 	};
 
-	const addAuthor = (id) => {
-		const author = authorList.filter((author) => author.id === id);
-		const listCourseAuthors = [...courseAuthorList, ...author];
-		setcourseAuthorList(listCourseAuthors);
-		const listAuthors = authorList.filter((author) => author.id !== id);
-		setAuthorList(listAuthors);
-	};
+	const addAuthor = useCallback(
+		(id) => {
+			const author = authorList.filter((author) => author.id === id);
+			setcourseAuthorList([...courseAuthorList, ...author]);
 
-	const deleteAuthor = (id) => {
-		const author = courseAuthorList.filter((author) => author.id === id);
-		const listAuthors = [...authorList, ...author];
-		setAuthorList(listAuthors);
-		const listCourseAuthors = courseAuthorList.filter(
-			(author) => author.id !== id
-		);
-		setcourseAuthorList(listCourseAuthors);
-	};
+			const listAuthors = authorList.filter((author) => author.id !== id);
+			setAuthorList(listAuthors);
+		},
+		[authorList, courseAuthorList]
+	);
+
+	const deleteAuthor = useCallback(
+		(id) => {
+			const author = courseAuthorList.filter((author) => author.id === id);
+			setAuthorList([...authorList, ...author]);
+
+			const listCourseAuthors = courseAuthorList.filter(
+				(author) => author.id !== id
+			);
+			setcourseAuthorList(listCourseAuthors);
+		},
+		[authorList, courseAuthorList]
+	);
 
 	return (
 		<div className='create-courses'>

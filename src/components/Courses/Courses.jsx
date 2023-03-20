@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
@@ -20,7 +20,7 @@ function Courses({ onButtonClick, courseList, authorList }) {
 		}
 	};
 
-	const searchCourse = (courseList, inputText) => {
+	const foundCourses = useMemo(() => {
 		if (inputText.length === 0) {
 			return courseList;
 		}
@@ -30,9 +30,7 @@ function Courses({ onButtonClick, courseList, authorList }) {
 				course.title.toLowerCase().indexOf(inputText.toLowerCase()) > -1 ||
 				course.id.toLowerCase().indexOf(inputText.toLowerCase()) > -1
 		);
-	};
-
-	const foundCourses = searchCourse(courseList, inputText);
+	}, [courseList, inputText]);
 
 	return (
 		<div className='courses'>
@@ -45,12 +43,14 @@ function Courses({ onButtonClick, courseList, authorList }) {
 			<div>
 				{foundCourses.map((course) => {
 					const authorNames = course.authors.map((author) => {
-						for (let mockedAuthor of authorList) {
-							if (mockedAuthor.id === author) {
-								return mockedAuthor.name;
-							}
+						const name = authorList.find(
+							(mockedAuthor) => mockedAuthor.id === author
+						);
+						if (name) {
+							return name.name;
+						} else {
+							return null;
 						}
-						return null;
 					});
 					return (
 						<CourseCard

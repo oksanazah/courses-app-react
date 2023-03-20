@@ -4,17 +4,15 @@ import { BUTTON_DELETE_AUTHOR } from '../../../../constants';
 function CourseAuthorList({ deleteAuthor, courseAuthorList }) {
 	const element = (
 		<ul>
-			{courseAuthorList.map((author) => {
-				return (
-					<li key={author.id} className='author'>
-						{author.name}{' '}
-						<Button
-							buttonText={BUTTON_DELETE_AUTHOR}
-							onButtonClick={() => deleteAuthor(author.id)}
-						/>
-					</li>
-				);
-			})}
+			{courseAuthorList.map((author) => (
+				<li key={author.id} className='author'>
+					{author.name}{' '}
+					<Button
+						buttonText={BUTTON_DELETE_AUTHOR}
+						onButtonClick={() => deleteAuthor(author.id)}
+					/>
+				</li>
+			))}
 		</ul>
 	);
 
