@@ -1,0 +1,11 @@
+.input {
+	padding: 8px 10px;
+	margin-right: 10px;
+	margin-top: 4px;
+	border: 1px solid #31c5ac;
+	width: 100%;
+}
+
+.input:focus {
+	outline: 1px solid #31c5ac;
+}

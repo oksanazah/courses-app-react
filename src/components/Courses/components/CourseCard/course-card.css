@@ -1,0 +1,38 @@
+.course-card {
+	display: grid;
+	grid-template: 1fr / 2fr 1fr;
+	gap: 40px;
+	border: 1px solid #31c5ac;
+	border-radius: 2px;
+	padding: 20px;
+	margin-bottom: 20px;
+}
+
+.course-card ul {
+	list-style-type: none;
+}
+
+.course-card li {
+	margin-bottom: 10px;
+	width: 350px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.course-card h1 {
+	margin-bottom: 10px;
+}
+
+.course-card p {
+	font-size: 14px;
+}
+
+.course-card span {
+	font-weight: bold;
+}
+
+.course-card button {
+	display: block;
+	margin: 20px auto 0px;
+}
