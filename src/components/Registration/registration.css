@@ -1,0 +1,26 @@
+.registration {
+	border: 1px solid #3ec1fd;
+	border-radius: 2px;
+	padding: 20vh 2vw;
+	text-align: center;
+}
+
+.registration-form {
+	width: 30%;
+	margin: 0 auto;
+	padding: 20px 0;
+	text-align: left;
+}
+
+.registration-form input {
+	margin-bottom: 14px;
+}
+
+.registration-form button {
+	display: block;
+	margin: 0 auto;
+}
+
+.registration p a {
+	color: #3ec1fd;
+}

@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
@@ -7,8 +8,19 @@ import { BUTTON_ADD } from '../../constants';
 
 import './courses.css';
 
-function Courses({ onButtonClick, courseList, authorList }) {
+function Courses({ courseList, authorList }) {
+	const navigate = useNavigate();
 	const [inputText, setInputText] = useState('');
+
+	useEffect(() => {
+		if (localStorage.getItem('token') === null) {
+			navigate('/login');
+		}
+	});
+
+	const onButtonClick = () => {
+		navigate('/courses/add');
+	};
 
 	const onSearch = (inputText) => {
 		setInputText(inputText);

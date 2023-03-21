@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
 
 import Input from '../../common/Input';
 import { Button } from '../../common/Button';
@@ -25,13 +26,14 @@ import {
 
 import './create-course.css';
 
-function CreateCourse({ onButtonClick, createNewCourse, newAuthorList }) {
+function CreateCourse({ createNewCourse, newAuthorList }) {
 	const [inputTitle, setInputTitle] = useState('');
 	const [inputDescription, setInputDescription] = useState('');
 	const [inputDuration, setInputDuration] = useState(0);
 	const [newAuthor, setNewAuthor] = useState('');
 	const [authorList, setAuthorList] = useState(mockedAuthorsList);
 	const [courseAuthorList, setcourseAuthorList] = useState([]);
+	const navigate = useNavigate();
 
 	const createCourse = () => {
 		if (
@@ -43,7 +45,7 @@ function CreateCourse({ onButtonClick, createNewCourse, newAuthorList }) {
 			alert('Please, fill in all fields');
 			return;
 		}
-		onButtonClick();
+
 		newAuthorList([...courseAuthorList, ...authorList]);
 		createNewCourse({
 			id: uuidv4(),
@@ -53,6 +55,7 @@ function CreateCourse({ onButtonClick, createNewCourse, newAuthorList }) {
 			duration: inputDuration,
 			authors: courseAuthorList.map((author) => author.id),
 		});
+		navigate('/courses');
 	};
 
 	const onDurationChange = (inputDuration) => {
@@ -89,7 +92,7 @@ function CreateCourse({ onButtonClick, createNewCourse, newAuthorList }) {
 	const createAuthor = (e) => {
 		e.preventDefault();
 
-		if (newAuthor.name.length < 2) {
+		if (!newAuthor.name || newAuthor.name.length < 2) {
 			return;
 		}
 
