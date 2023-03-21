@@ -1,0 +1,71 @@
+.create-courses {
+	border: 1px solid #3ec1fd;
+	border-radius: 2px;
+	padding: 20px;
+}
+
+.create-courses ul {
+	list-style-type: none;
+}
+
+.create-courses li {
+	margin-bottom: 5px;
+}
+
+.create-title {
+	display: grid;
+	grid-template: 1fr / 1fr 2fr;
+	margin-bottom: 10px;
+}
+
+.create-button {
+	place-self: end;
+}
+
+.create-description textarea {
+	width: 100%;
+	margin-top: 4px;
+	margin-bottom: 10px;
+	padding: 15px;
+	border: 1px solid #31c5ac;
+}
+
+.create-description textarea:focus {
+	outline: 1px solid #31c5ac;
+}
+
+.add-author-field {
+	display: grid;
+	grid-template: 1fr 1fr / 1fr 1fr;
+	row-gap: 40px;
+	column-gap: 10%;
+	border: 1px solid #31c5ac;
+	padding: 20px;
+	padding-right: 14%;
+}
+
+.add-author-field h4,
+h5 {
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.author {
+	display: flex;
+	justify-content: space-between;
+}
+
+.create-author-button button {
+	display: block;
+	margin: 20px auto 0px;
+}
+
+.transform-duration {
+	margin-top: 20px;
+	font-size: 24px;
+}
+
+.transform-duration span {
+	font-size: 32px;
+	font-weight: 600;
+}
