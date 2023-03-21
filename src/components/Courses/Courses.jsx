@@ -42,16 +42,11 @@ function Courses({ onButtonClick, courseList, authorList }) {
 			</div>
 			<div>
 				{foundCourses.map((course) => {
-					const authorNames = course.authors.map((author) => {
-						const name = authorList.find(
-							(mockedAuthor) => mockedAuthor.id === author
-						);
-						if (name) {
-							return name.name;
-						} else {
-							return null;
-						}
-					});
+					const authorNames = course.authors.map(
+						(author) =>
+							authorList.find((mockedAuthor) => mockedAuthor.id === author)
+								?.name || null
+					);
 					return (
 						<CourseCard
 							key={course.id}
