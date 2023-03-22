@@ -1,7 +1,13 @@
 import { Button } from '../../../../common/Button';
 import { BUTTON_ADD_AUTHOR } from '../../../../constants';
+import type { Author } from '../../../../helpers';
 
-function AuthorList({ addAuthor, authorList }) {
+interface AuthorListParams {
+	addAuthor: (id: string) => void;
+	authorList: Author[];
+}
+
+function AuthorList({ addAuthor, authorList }: AuthorListParams) {
 	const element = (
 		<ul>
 			{authorList.map((author) => (

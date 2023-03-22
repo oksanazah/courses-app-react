@@ -18,22 +18,22 @@ import './login.css';
 
 function Login() {
 	const navigate = useNavigate();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
+	const [email, setEmail] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
 	const user = {
 		email,
 		password,
 	};
 
-	const onEmailChange = (email) => {
+	const onEmailChange = (email: string) => {
 		setEmail(email);
 	};
 
-	const onPasswordChange = (password) => {
+	const onPasswordChange = (password: string) => {
 		setPassword(password);
 	};
 
-	const onSubmit = async (e) => {
+	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
 		const result = await auth(user, 'login');

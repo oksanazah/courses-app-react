@@ -5,12 +5,18 @@ import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
 import { Button } from '../../common/Button';
 import { BUTTON_ADD } from '../../constants';
+import type { Course, Author } from '../../helpers';
 
 import './courses.css';
 
-function Courses({ courseList, authorList }) {
+interface CoursesParams {
+	courseList: Course[];
+	authorList: Author[];
+}
+
+function Courses({ courseList, authorList }: CoursesParams) {
 	const navigate = useNavigate();
-	const [inputText, setInputText] = useState('');
+	const [inputText, setInputText] = useState<string>('');
 
 	useEffect(() => {
 		if (localStorage.getItem('token') === null) {
@@ -22,17 +28,17 @@ function Courses({ courseList, authorList }) {
 		navigate('/courses/add');
 	};
 
-	const onSearch = (inputText) => {
+	const onSearch = (inputText: string) => {
 		setInputText(inputText);
 	};
 
-	const onReset = (inputText) => {
+	const onReset = (inputText: string) => {
 		if (inputText === '') {
 			setInputText(inputText);
 		}
 	};
 
-	const foundCourses = useMemo(() => {
+	const foundCourses = useMemo<Course[]>(() => {
 		if (inputText.length === 0) {
 			return courseList;
 		}

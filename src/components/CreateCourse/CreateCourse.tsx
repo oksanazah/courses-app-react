@@ -7,6 +7,7 @@ import { Button } from '../../common/Button';
 import AuthorList from './components/AuthorList';
 import CourseAuthorList from './components/CourseAuthorList';
 import { dateGenerator, pipeDuration } from '../../helpers';
+import type { Author, Course } from '../../helpers';
 import {
 	TITLE_ID,
 	TITLE_LABEL,
@@ -26,20 +27,25 @@ import {
 
 import './create-course.css';
 
-function CreateCourse({ createNewCourse, newAuthorList }) {
-	const [inputTitle, setInputTitle] = useState('');
-	const [inputDescription, setInputDescription] = useState('');
-	const [inputDuration, setInputDuration] = useState(0);
-	const [newAuthor, setNewAuthor] = useState('');
-	const [authorList, setAuthorList] = useState(mockedAuthorsList);
-	const [courseAuthorList, setcourseAuthorList] = useState([]);
+interface CreateCourseParams {
+	createNewCourse: (course: Course) => void;
+	newAuthorList: (authorList: Author[]) => void;
+}
+
+function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
+	const [inputTitle, setInputTitle] = useState<string>('');
+	const [inputDescription, setInputDescription] = useState<string>('');
+	const [inputDuration, setInputDuration] = useState<string>('');
+	const [newAuthor, setNewAuthor] = useState<Author>({ name: '', id: '' });
+	const [authorList, setAuthorList] = useState<Author[]>(mockedAuthorsList);
+	const [courseAuthorList, setcourseAuthorList] = useState<Author[]>([]);
 	const navigate = useNavigate();
 
 	const createCourse = () => {
 		if (
 			inputTitle.length < 1 ||
-			inputDescription < 2 ||
-			inputDuration < 1 ||
+			inputDescription.length < 2 ||
+			!inputDuration ||
 			courseAuthorList.length < 1
 		) {
 			alert('Please, fill in all fields');
@@ -51,23 +57,23 @@ function CreateCourse({ createNewCourse, newAuthorList }) {
 			id: uuidv4(),
 			title: inputTitle,
 			description: inputDescription,
-			creationDate: dateGenerator(new Date()),
-			duration: inputDuration,
+			creationDate: dateGenerator(),
+			duration: Number(inputDuration),
 			authors: courseAuthorList.map((author) => author.id),
 		});
 		navigate('/courses');
 	};
 
-	const onDurationChange = (inputDuration) => {
-		if (isNaN(inputDuration)) {
-			setInputDuration(0);
+	const onDurationChange = (inputDuration: string) => {
+		if (isNaN(Number(inputDuration))) {
+			setInputDuration('');
 			return;
 		}
 
 		setInputDuration(inputDuration);
 	};
 
-	const onDescriptionChange = (e) => {
+	const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 		const text = e.target.value;
 
 		if (text.length < 2) {
@@ -77,11 +83,11 @@ function CreateCourse({ createNewCourse, newAuthorList }) {
 		setInputDescription(text);
 	};
 
-	const onTitleChange = (title) => {
+	const onTitleChange = (title: string) => {
 		setInputTitle(title);
 	};
 
-	const onAuthorChange = (author) => {
+	const onAuthorChange = (author: string) => {
 		const newAuthor = {
 			id: uuidv4(),
 			name: author,
@@ -89,7 +95,7 @@ function CreateCourse({ createNewCourse, newAuthorList }) {
 		setNewAuthor(newAuthor);
 	};
 
-	const createAuthor = (e) => {
+	const createAuthor = (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 
 		if (!newAuthor.name || newAuthor.name.length < 2) {
@@ -100,7 +106,7 @@ function CreateCourse({ createNewCourse, newAuthorList }) {
 	};
 
 	const addAuthor = useCallback(
-		(id) => {
+		(id: string) => {
 			const author = authorList.filter((author) => author.id === id);
 			setcourseAuthorList([...courseAuthorList, ...author]);
 
@@ -111,7 +117,7 @@ function CreateCourse({ createNewCourse, newAuthorList }) {
 	);
 
 	const deleteAuthor = useCallback(
-		(id) => {
+		(id: string) => {
 			const author = courseAuthorList.filter((author) => author.id === id);
 			setAuthorList([...authorList, ...author]);
 
@@ -146,7 +152,7 @@ function CreateCourse({ createNewCourse, newAuthorList }) {
 					id={DESCRIPTION_ID}
 					placeholder={DESCRIPTION_PLACEHOLDER}
 					onChange={onDescriptionChange}
-					rows='5'
+					rows={5}
 				></textarea>
 			</div>
 
@@ -178,7 +184,7 @@ function CreateCourse({ createNewCourse, newAuthorList }) {
 						labelText={DURATION_LABEL}
 					/>
 					<div className='transform-duration'>
-						Duration: <span>{pipeDuration(inputDuration)}</span> hours
+						Duration: <span>{pipeDuration(Number(inputDuration))}</span> hours
 					</div>
 				</div>
 

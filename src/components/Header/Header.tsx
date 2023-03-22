@@ -6,7 +6,11 @@ import { BUTTON_LOGOUT } from '../../constants';
 
 import './header.css';
 
-function Header({ userName }) {
+interface HeaderProps {
+	userName: string | null;
+}
+
+function Header({ userName }: HeaderProps) {
 	const location = useLocation();
 	const navigate = useNavigate();
 

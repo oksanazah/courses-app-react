@@ -1,4 +1,6 @@
-const auth = async (user, url) => {
+import type { User } from './helpers';
+
+const auth = async (user: User, url: string) => {
 	const response = await fetch(`http://localhost:4000/${url}`, {
 		method: 'POST',
 		body: JSON.stringify(user),
