@@ -13,23 +13,26 @@ import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration';
 import Login from './components/Login/Login';
 import { mockedAuthorsList, mockedCoursesList } from './constants';
+import type { Course, Author } from './helpers/interfaces';
 
 import './App.css';
 
 function App() {
-	const [courseList, setCourseList] = useState(mockedCoursesList);
-	const [authorList, setAuthorList] = useState(mockedAuthorsList);
-	const [userName, setUserName] = useState(localStorage.getItem('name'));
+	const [courseList, setCourseList] = useState<Course[]>(mockedCoursesList);
+	const [authorList, setAuthorList] = useState<Author[]>(mockedAuthorsList);
+	const [userName, setUserName] = useState<string | null>(
+		localStorage.getItem('name')
+	);
 
-	const newAuthorList = (authorList) => {
+	const newAuthorList = (authorList: Author[]) => {
 		setAuthorList(authorList);
 	};
 
-	const createNewCourse = (course) => {
+	const createNewCourse = (course: Course) => {
 		setCourseList([...courseList, course]);
 	};
 
-	const getUserName = (userName) => {
+	const getUserName = (userName: string) => {
 		setUserName(userName);
 	};
 
@@ -39,7 +42,6 @@ function App() {
 				<Header userName={userName} />
 				<Routes>
 					<Route
-						exact
 						path='/'
 						element={
 							localStorage.getItem('token') === null ? (

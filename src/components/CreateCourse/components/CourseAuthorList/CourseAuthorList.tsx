@@ -1,7 +1,16 @@
 import { Button } from '../../../../common/Button';
 import { BUTTON_DELETE_AUTHOR } from '../../../../constants';
+import type { Author } from '../../../../helpers';
 
-function CourseAuthorList({ deleteAuthor, courseAuthorList }) {
+interface CourseAuthorListParams {
+	deleteAuthor: (id: string) => void;
+	courseAuthorList: Author[];
+}
+
+function CourseAuthorList({
+	deleteAuthor,
+	courseAuthorList,
+}: CourseAuthorListParams) {
 	const element = (
 		<ul>
 			{courseAuthorList.map((author) => (

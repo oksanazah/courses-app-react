@@ -4,40 +4,49 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
 import {
+	USER_NAME_ID,
+	USER_NAME_LABEL,
+	USER_NAME_PLACEHOLDER,
 	USER_EMAIL_ID,
 	USER_EMAIL_LABEL,
 	USER_EMAIL_PLACEHOLDER,
 	USER_PASSWORD_ID,
 	USER_PASSWORD_LABEL,
 	USER_PASSWORD_PLACEHOLDER,
-	BUTTON_LOGIN,
+	BUTTON_REGISTRATION,
 } from '../../constants';
 
-import './login.css';
+import './registration.css';
 
-function Login({ getUserName }) {
+function Registration() {
 	const navigate = useNavigate();
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const user = {
+	const [name, setName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
+	const newUser = {
+		name,
 		email,
 		password,
 	};
 
-	const onEmailChange = (email) => {
+	const onNameChange = (name: string) => {
+		setName(name);
+	};
+
+	const onEmailChange = (email: string) => {
 		setEmail(email);
 	};
 
-	const onPasswordChange = (password) => {
+	const onPasswordChange = (password: string) => {
 		setPassword(password);
 	};
 
-	const onSubmit = async (e) => {
+	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		const response = await fetch('http://localhost:4000/login', {
+		const response = await fetch('http://localhost:4000/register', {
 			method: 'POST',
-			body: JSON.stringify(user),
+			body: JSON.stringify(newUser),
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -46,27 +55,23 @@ function Login({ getUserName }) {
 		const result = await response.json();
 
 		if (!response.ok) {
-			console.log(result);
-			if (!result.errors) {
-				alert('wrong password');
-				return;
-			}
-
 			alert(result.errors);
 			return;
 		}
 
-		localStorage.setItem('token', `${result.result}`);
-		localStorage.setItem('name', `${result.user.name}`);
-		getUserName(result.user.name);
-
-		navigate('/courses');
+		navigate('/login');
 	};
 
 	return (
-		<div className='login'>
-			<h1>Login</h1>
-			<form className='login-form' onSubmit={onSubmit}>
+		<div className='registration'>
+			<h1>Registration</h1>
+			<form className='registration-form' onSubmit={onSubmit}>
+				<Input
+					inputId={USER_NAME_ID}
+					labelText={USER_NAME_LABEL}
+					placeholderText={USER_NAME_PLACEHOLDER}
+					onInputChange={onNameChange}
+				/>
 				<Input
 					inputType={'email'}
 					inputId={USER_EMAIL_ID}
@@ -81,14 +86,13 @@ function Login({ getUserName }) {
 					placeholderText={USER_PASSWORD_PLACEHOLDER}
 					onInputChange={onPasswordChange}
 				/>
-				<Button buttonText={BUTTON_LOGIN} />
+				<Button buttonText={BUTTON_REGISTRATION} />
 			</form>
 			<p>
-				If you not have an account you can{' '}
-				<Link to={'/registration'}>Registration</Link>
+				If you have an account you can <Link to={'/login'}>Login</Link>
 			</p>
 		</div>
 	);
 }
 
-export default Login;
+export default Registration;

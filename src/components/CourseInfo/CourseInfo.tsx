@@ -2,12 +2,15 @@ import { Link, useParams } from 'react-router-dom';
 
 import { mockedCoursesList, mockedAuthorsList } from '../../constants';
 import { pipeDuration } from '../../helpers';
+import { Course } from '../../helpers';
 
 import './course-info.css';
 
 function CourseInfo() {
-	const { courseId } = useParams();
-	const course = mockedCoursesList.find((course) => course.id === courseId);
+	const { courseId } = useParams<string>();
+	const course: Course = mockedCoursesList.find(
+		(course) => course.id === courseId
+	)!;
 
 	return (
 		<div className='course-info'>
