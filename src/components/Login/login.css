@@ -1,0 +1,26 @@
+.login {
+	border: 1px solid #3ec1fd;
+	border-radius: 2px;
+	padding: 20vh 2vw;
+	text-align: center;
+}
+
+.login-form {
+	width: 30%;
+	margin: 0 auto;
+	padding: 20px 0;
+	text-align: left;
+}
+
+.login-form input {
+	margin-bottom: 14px;
+}
+
+.login-form button {
+	display: block;
+	margin: 0 auto;
+}
+
+.login p a {
+	color: #3ec1fd;
+}

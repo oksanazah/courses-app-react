@@ -2,7 +2,13 @@ import { useState } from 'react';
 
 import './input.css';
 
-function Input({ labelText, placeholderText, inputId, onInputChange }) {
+function Input({
+	labelText,
+	placeholderText,
+	inputId,
+	onInputChange,
+	inputType = 'text',
+}) {
 	const [inputText, setInputText] = useState('');
 	const onChange = (e) => {
 		const text = e.target.value;
@@ -15,8 +21,7 @@ function Input({ labelText, placeholderText, inputId, onInputChange }) {
 			<label htmlFor={inputId}>{labelText}</label>
 			<input
 				className='input'
-				type='text'
-				autoComplete='off'
+				type={inputType}
 				id={inputId}
 				name={inputId}
 				placeholder={placeholderText}

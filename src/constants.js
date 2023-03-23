@@ -6,8 +6,10 @@ const BUTTON_CREATE = 'Create course';
 const BUTTON_CREATE_AUTHOR = 'Create author';
 const BUTTON_ADD_AUTHOR = 'Add author';
 const BUTTON_DELETE_AUTHOR = 'Delete author';
-const SEARCH_PLACEHOLDER = 'Enter course name or id...';
+const BUTTON_REGISTRATION = 'Registration';
+const BUTTON_LOGIN = 'Login';
 const SEARCH_ID = 'search';
+const SEARCH_PLACEHOLDER = 'Enter course name or id...';
 const TITLE_ID = 'title';
 const TITLE_LABEL = 'Title';
 const TITLE_PLACEHOLDER = 'Enter title...';
@@ -19,6 +21,15 @@ const DURATION_LABEL = 'Duration';
 const DURATION_PLACEHOLDER = 'Enter duration in minutes...';
 const DESCRIPTION_ID = 'description';
 const DESCRIPTION_PLACEHOLDER = 'Enter description';
+const USER_NAME_ID = 'name';
+const USER_NAME_LABEL = 'Name';
+const USER_NAME_PLACEHOLDER = 'Enter name';
+const USER_EMAIL_ID = 'email';
+const USER_EMAIL_LABEL = 'Email';
+const USER_EMAIL_PLACEHOLDER = 'Enter email';
+const USER_PASSWORD_ID = 'password';
+const USER_PASSWORD_LABEL = 'Password';
+const USER_PASSWORD_PLACEHOLDER = 'Enter password';
 const mockedCoursesList = [
 	{
 		id: 'de5aaa59-90f5-4dbc-b8a9-aaf205c551ba',
@@ -71,6 +82,8 @@ export {
 	BUTTON_CREATE_AUTHOR,
 	BUTTON_ADD_AUTHOR,
 	BUTTON_DELETE_AUTHOR,
+	BUTTON_REGISTRATION,
+	BUTTON_LOGIN,
 	mockedCoursesList,
 	mockedAuthorsList,
 	SEARCH_PLACEHOLDER,
@@ -86,4 +99,13 @@ export {
 	DURATION_PLACEHOLDER,
 	DESCRIPTION_ID,
 	DESCRIPTION_PLACEHOLDER,
+	USER_NAME_ID,
+	USER_NAME_LABEL,
+	USER_NAME_PLACEHOLDER,
+	USER_EMAIL_ID,
+	USER_EMAIL_LABEL,
+	USER_EMAIL_PLACEHOLDER,
+	USER_PASSWORD_ID,
+	USER_PASSWORD_LABEL,
+	USER_PASSWORD_PLACEHOLDER,
 };
