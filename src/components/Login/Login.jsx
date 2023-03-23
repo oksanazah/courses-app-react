@@ -16,7 +16,7 @@ import {
 
 import './login.css';
 
-function Login({ getUserName }) {
+function Login() {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -40,7 +40,6 @@ function Login({ getUserName }) {
 
 		localStorage.setItem('token', `${result.result}`);
 		localStorage.setItem('name', `${result.user.name}`);
-		getUserName(result.user.name);
 
 		navigate('/courses');
 	};

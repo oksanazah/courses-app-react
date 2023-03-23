@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
 	BrowserRouter as Router,
 	Routes,
@@ -19,7 +19,11 @@ import './App.css';
 function App() {
 	const [courseList, setCourseList] = useState(mockedCoursesList);
 	const [authorList, setAuthorList] = useState(mockedAuthorsList);
-	const [userName, setUserName] = useState(localStorage.getItem('name' || ''));
+	const [userName, setUserName] = useState('');
+
+	useEffect(() => {
+		setUserName(localStorage.getItem('name'));
+	}, []);
 
 	const newAuthorList = (authorList) => {
 		setAuthorList(authorList);
@@ -27,10 +31,6 @@ function App() {
 
 	const createNewCourse = (course) => {
 		setCourseList([...courseList, course]);
-	};
-
-	const getUserName = (userName) => {
-		setUserName(userName);
 	};
 
 	return (
@@ -67,7 +67,7 @@ function App() {
 					/>
 					<Route path='/courses/:courseId' element={<CourseInfo />} />
 					<Route path='/registration' element={<Registration />} />
-					<Route path='/login' element={<Login getUserName={getUserName} />} />
+					<Route path='/login' element={<Login />} />
 				</Routes>
 			</div>
 		</Router>

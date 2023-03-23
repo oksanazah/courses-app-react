@@ -16,7 +16,7 @@ function Courses({ courseList, authorList }) {
 		if (localStorage.getItem('token') === null) {
 			navigate('/login');
 		}
-	});
+	}, [navigate]);
 
 	const onButtonClick = () => {
 		navigate('/courses/add');
