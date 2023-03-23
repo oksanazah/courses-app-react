@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
+import { auth } from '../../services';
 import {
 	USER_NAME_ID,
 	USER_NAME_LABEL,
@@ -44,22 +45,11 @@ function Registration() {
 	const onSubmit = async (e) => {
 		e.preventDefault();
 
-		const response = await fetch('http://localhost:4000/register', {
-			method: 'POST',
-			body: JSON.stringify(newUser),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		const result = await auth(newUser, 'register');
 
-		const result = await response.json();
-
-		if (!response.ok) {
-			alert(result.errors);
-			return;
+		if (result) {
+			navigate('/login');
 		}
-
-		navigate('/login');
 	};
 
 	return (

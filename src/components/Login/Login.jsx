@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
+import { auth } from '../../services';
 import {
 	USER_EMAIL_ID,
 	USER_EMAIL_LABEL,
@@ -35,25 +36,7 @@ function Login({ getUserName }) {
 	const onSubmit = async (e) => {
 		e.preventDefault();
 
-		const response = await fetch('http://localhost:4000/login', {
-			method: 'POST',
-			body: JSON.stringify(user),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-
-		const result = await response.json();
-
-		if (!response.ok) {
-			if (!result.errors) {
-				alert('wrong password');
-				return;
-			}
-
-			alert(result.errors);
-			return;
-		}
+		const result = await auth(user, 'login');
 
 		localStorage.setItem('token', `${result.result}`);
 		localStorage.setItem('name', `${result.user.name}`);
