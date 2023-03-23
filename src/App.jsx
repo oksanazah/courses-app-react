@@ -19,7 +19,7 @@ import './App.css';
 function App() {
 	const [courseList, setCourseList] = useState(mockedCoursesList);
 	const [authorList, setAuthorList] = useState(mockedAuthorsList);
-	const [userName, setUserName] = useState(localStorage.getItem('name'));
+	const [userName, setUserName] = useState(localStorage.getItem('name' || ''));
 
 	const newAuthorList = (authorList) => {
 		setAuthorList(authorList);

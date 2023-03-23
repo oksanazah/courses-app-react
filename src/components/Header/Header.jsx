@@ -11,7 +11,8 @@ function Header({ userName }) {
 	const navigate = useNavigate();
 
 	const logout = () => {
-		localStorage.clear();
+		localStorage.removeItem('token');
+		localStorage.removeItem('name');
 		navigate('/login');
 	};
 

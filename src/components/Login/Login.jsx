@@ -46,7 +46,6 @@ function Login({ getUserName }) {
 		const result = await response.json();
 
 		if (!response.ok) {
-			console.log(result);
 			if (!result.errors) {
 				alert('wrong password');
 				return;

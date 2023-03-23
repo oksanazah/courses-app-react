@@ -22,7 +22,6 @@ function Input({
 			<input
 				className='input'
 				type={inputType}
-				autoComplete='off'
 				id={inputId}
 				name={inputId}
 				placeholder={placeholderText}
