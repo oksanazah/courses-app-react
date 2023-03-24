@@ -7,10 +7,10 @@ interface AuthorListParams {
 	authorList: Author[];
 }
 
-function AuthorList({ addAuthor, authorList }: AuthorListParams) {
-	const element = (
+const AuthorList: React.FC<AuthorListParams> = ({ addAuthor, authorList }) => {
+	const element: JSX.Element = (
 		<ul>
-			{authorList.map((author) => (
+			{authorList.map((author: Author) => (
 				<li key={author.id} className='author'>
 					{author.name}{' '}
 					<Button
@@ -28,6 +28,6 @@ function AuthorList({ addAuthor, authorList }: AuthorListParams) {
 			{authorList.length === 0 ? <h5>Author list is empty</h5> : element}
 		</div>
 	);
-}
+};
 
 export default AuthorList;

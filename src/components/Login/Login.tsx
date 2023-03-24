@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
 import { auth } from '../../services';
+import type { User } from '../../helpers';
 import {
 	USER_EMAIL_ID,
 	USER_EMAIL_LABEL,
@@ -16,30 +17,32 @@ import {
 
 import './login.css';
 
-function Login() {
+const Login: React.FC = () => {
 	const navigate = useNavigate();
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
-	const user = {
+	const user: User = {
 		email,
 		password,
 	};
 
-	const onEmailChange = (email: string) => {
+	const onEmailChange = (email: string): void => {
 		setEmail(email);
 	};
 
-	const onPasswordChange = (password: string) => {
+	const onPasswordChange = (password: string): void => {
 		setPassword(password);
 	};
 
-	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (
+		e: React.FormEvent<HTMLFormElement>
+	): Promise<void> => {
 		e.preventDefault();
 
 		const result = await auth(user, 'login');
 
-		localStorage.setItem('token', `${result.result}`);
-		localStorage.setItem('name', `${result.user.name}`);
+		localStorage.setItem('token', `${result?.result}`);
+		localStorage.setItem('name', `${result?.user?.name}`);
 
 		navigate('/courses');
 	};
@@ -70,6 +73,6 @@ function Login() {
 			</p>
 		</div>
 	);
-}
+};
 
 export default Login;

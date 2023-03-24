@@ -17,7 +17,7 @@ import type { Course, Author } from './helpers/interfaces';
 
 import './App.css';
 
-function App() {
+const App: React.FC = () => {
 	const [courseList, setCourseList] = useState<Course[]>(mockedCoursesList);
 	const [authorList, setAuthorList] = useState<Author[]>(mockedAuthorsList);
 	const [userName, setUserName] = useState<string | null>('');
@@ -26,11 +26,11 @@ function App() {
 		setUserName(localStorage.getItem('name'));
 	}, []);
 
-	const newAuthorList = (authorList: Author[]) => {
+	const newAuthorList = (authorList: Author[]): void => {
 		setAuthorList(authorList);
 	};
 
-	const createNewCourse = (course: Course) => {
+	const createNewCourse = (course: Course): void => {
 		setCourseList([...courseList, course]);
 	};
 
@@ -72,6 +72,6 @@ function App() {
 			</div>
 		</Router>
 	);
-}
+};
 
 export default App;

@@ -15,15 +15,15 @@ interface SearchBarParams {
 	onReset: (text: string) => void;
 }
 
-function SearchBar({ onSearch, onReset }: SearchBarParams) {
+const SearchBar: React.FC<SearchBarParams> = ({ onSearch, onReset }) => {
 	const [inputText, setInputText] = useState<string>('');
 
-	const onInputChange = (inputText: string) => {
+	const onInputChange = (inputText: string): void => {
 		setInputText(inputText);
 		onReset(inputText);
 	};
 
-	const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.preventDefault();
 		onSearch(inputText);
 	};
@@ -38,6 +38,6 @@ function SearchBar({ onSearch, onReset }: SearchBarParams) {
 			<Button buttonText={BUTTON_SEARCH} onButtonClick={onButtonClick} />
 		</div>
 	);
-}
+};
 
 export default SearchBar;

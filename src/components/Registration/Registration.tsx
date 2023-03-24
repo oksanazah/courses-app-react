@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
 import { auth } from '../../services';
+import { User } from '../../helpers';
 import {
 	USER_NAME_ID,
 	USER_NAME_LABEL,
@@ -19,30 +20,32 @@ import {
 
 import './registration.css';
 
-function Registration() {
+const Registration: React.FC = () => {
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
-	const newUser = {
+	const newUser: User = {
 		name,
 		email,
 		password,
 	};
 
-	const onNameChange = (name: string) => {
+	const onNameChange = (name: string): void => {
 		setName(name);
 	};
 
-	const onEmailChange = (email: string) => {
+	const onEmailChange = (email: string): void => {
 		setEmail(email);
 	};
 
-	const onPasswordChange = (password: string) => {
+	const onPasswordChange = (password: string): void => {
 		setPassword(password);
 	};
 
-	const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	const onSubmit = async (
+		e: React.FormEvent<HTMLFormElement>
+	): Promise<void> => {
 		e.preventDefault();
 
 		const result = await auth(newUser, 'register');
@@ -83,6 +86,6 @@ function Registration() {
 			</p>
 		</div>
 	);
-}
+};
 
 export default Registration;

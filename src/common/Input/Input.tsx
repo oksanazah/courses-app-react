@@ -10,15 +10,15 @@ interface InputProps {
 	labelText?: string;
 }
 
-function Input({
+const Input: React.FC<InputProps> = ({
 	labelText,
 	placeholderText,
 	inputId,
 	onInputChange,
 	inputType = 'text',
-}: InputProps) {
+}) => {
 	const [inputText, setInputText] = useState<string>('');
-	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		const text = e.target.value;
 		setInputText(text);
 		onInputChange(text);
@@ -38,6 +38,6 @@ function Input({
 			/>
 		</>
 	);
-}
+};
 
 export default Input;

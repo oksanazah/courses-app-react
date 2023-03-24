@@ -14,37 +14,37 @@ interface CoursesParams {
 	authorList: Author[];
 }
 
-function Courses({ courseList, authorList }: CoursesParams) {
+const Courses: React.FC<CoursesParams> = ({ courseList, authorList }) => {
 	const navigate = useNavigate();
 	const [inputText, setInputText] = useState<string>('');
 
-	useEffect(() => {
+	useEffect((): void => {
 		if (localStorage.getItem('token') === null) {
 			navigate('/login');
 		}
 	}, [navigate]);
 
-	const onButtonClick = () => {
+	const onButtonClick = (): void => {
 		navigate('/courses/add');
 	};
 
-	const onSearch = (inputText: string) => {
+	const onSearch = (inputText: string): void => {
 		setInputText(inputText);
 	};
 
-	const onReset = (inputText: string) => {
+	const onReset = (inputText: string): void => {
 		if (inputText === '') {
 			setInputText(inputText);
 		}
 	};
 
-	const foundCourses = useMemo<Course[]>(() => {
+	const foundCourses: Course[] = useMemo<Course[]>((): Course[] => {
 		if (inputText.length === 0) {
 			return courseList;
 		}
 
 		return courseList.filter(
-			(course) =>
+			(course: Course) =>
 				course.title.toLowerCase().indexOf(inputText.toLowerCase()) > -1 ||
 				course.id.toLowerCase().indexOf(inputText.toLowerCase()) > -1
 		);
@@ -59,11 +59,12 @@ function Courses({ courseList, authorList }: CoursesParams) {
 				</div>
 			</div>
 			<div>
-				{foundCourses.map((course) => {
-					const authorNames = course.authors.map(
-						(author) =>
-							authorList.find((mockedAuthor) => mockedAuthor.id === author)
-								?.name || null
+				{foundCourses.map((course: Course) => {
+					const authorNames: (string | null)[] = course.authors.map(
+						(author: string): string | null =>
+							authorList.find(
+								(mockedAuthor: Author): boolean => mockedAuthor.id === author
+							)?.name || null
 					);
 					return (
 						<CourseCard
@@ -76,6 +77,6 @@ function Courses({ courseList, authorList }: CoursesParams) {
 			</div>
 		</div>
 	);
-}
+};
 
 export default Courses;

@@ -10,17 +10,17 @@ interface HeaderProps {
 	userName: string | null;
 }
 
-function Header({ userName }: HeaderProps) {
+const Header: React.FC<HeaderProps> = ({ userName }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const logout = () => {
+	const logout = (): void => {
 		localStorage.removeItem('token');
 		localStorage.removeItem('name');
 		navigate('/login');
 	};
 
-	const userBlock = (
+	const userBlock: JSX.Element = (
 		<>
 			<span>{userName}</span>
 			<Button buttonText={BUTTON_LOGOUT} onButtonClick={logout} />
@@ -39,6 +39,6 @@ function Header({ userName }: HeaderProps) {
 			</div>
 		</header>
 	);
-}
+};
 
 export default Header;

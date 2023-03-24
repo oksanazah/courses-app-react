@@ -5,6 +5,7 @@ interface ButtonProps {
 	onButtonClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-export const Button = ({ buttonText, onButtonClick }: ButtonProps) => (
-	<button onClick={onButtonClick}>{buttonText}</button>
-);
+export const Button: React.FC<ButtonProps> = ({
+	buttonText,
+	onButtonClick,
+}) => <button onClick={onButtonClick}>{buttonText}</button>;

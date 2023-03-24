@@ -12,12 +12,12 @@ interface CourseCardParams {
 	authorNames: (string | null)[];
 }
 
-function CourseCard({ course, authorNames }: CourseCardParams) {
+const CourseCard: React.FC<CourseCardParams> = ({ course, authorNames }) => {
 	const { id, title, description, creationDate, duration } = course;
 	const authorString: string = authorNames.join(', ');
 	const navigate = useNavigate();
 
-	const onButtonClick = () => {
+	const onButtonClick = (): void => {
 		navigate(`/courses/${id}`);
 	};
 
@@ -48,6 +48,6 @@ function CourseCard({ course, authorNames }: CourseCardParams) {
 			</div>
 		</article>
 	);
-}
+};
 
 export default CourseCard;

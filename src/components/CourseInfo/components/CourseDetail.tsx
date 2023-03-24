@@ -12,9 +12,9 @@ interface CourseDetailProps {
 	};
 }
 
-function CourseDetail({
+const CourseDetail: React.FC<CourseDetailProps> = ({
 	course: { title, description, id, duration, creationDate, authors },
-}: CourseDetailProps) {
+}) => {
 	return (
 		<>
 			<h1>{title}</h1>
@@ -52,6 +52,6 @@ function CourseDetail({
 			</div>
 		</>
 	);
-}
+};
 
 export default CourseDetail;

@@ -7,13 +7,13 @@ interface CourseAuthorListParams {
 	courseAuthorList: Author[];
 }
 
-function CourseAuthorList({
+const CourseAuthorList: React.FC<CourseAuthorListParams> = ({
 	deleteAuthor,
 	courseAuthorList,
-}: CourseAuthorListParams) {
-	const element = (
+}) => {
+	const element: JSX.Element = (
 		<ul>
-			{courseAuthorList.map((author) => (
+			{courseAuthorList.map((author: Author) => (
 				<li key={author.id} className='author'>
 					{author.name}{' '}
 					<Button
@@ -31,6 +31,6 @@ function CourseAuthorList({
 			{courseAuthorList.length === 0 ? <h5>Author list is empty</h5> : element}
 		</div>
 	);
-}
+};
 
 export default CourseAuthorList;

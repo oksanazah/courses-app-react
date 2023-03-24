@@ -32,7 +32,10 @@ interface CreateCourseParams {
 	newAuthorList: (authorList: Author[]) => void;
 }
 
-function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
+const CreateCourse: React.FC<CreateCourseParams> = ({
+	createNewCourse,
+	newAuthorList,
+}) => {
 	const [inputTitle, setInputTitle] = useState<string>('');
 	const [inputDescription, setInputDescription] = useState<string>('');
 	const [inputDuration, setInputDuration] = useState<string>('');
@@ -41,7 +44,7 @@ function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
 	const [courseAuthorList, setcourseAuthorList] = useState<Author[]>([]);
 	const navigate = useNavigate();
 
-	const createCourse = () => {
+	const createCourse = (): void => {
 		if (
 			inputTitle.length < 1 ||
 			inputDescription.length < 2 ||
@@ -59,12 +62,12 @@ function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
 			description: inputDescription,
 			creationDate: dateGenerator(),
 			duration: Number(inputDuration),
-			authors: courseAuthorList.map((author) => author.id),
+			authors: courseAuthorList.map((author: Author): string => author.id),
 		});
 		navigate('/courses');
 	};
 
-	const onDurationChange = (inputDuration: string) => {
+	const onDurationChange = (inputDuration: string): void => {
 		if (isNaN(Number(inputDuration))) {
 			setInputDuration('');
 			return;
@@ -73,8 +76,10 @@ function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
 		setInputDuration(inputDuration);
 	};
 
-	const onDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-		const text = e.target.value;
+	const onDescriptionChange = (
+		e: React.ChangeEvent<HTMLTextAreaElement>
+	): void => {
+		const text: string = e.target.value;
 
 		if (text.length < 2) {
 			return;
@@ -83,19 +88,19 @@ function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
 		setInputDescription(text);
 	};
 
-	const onTitleChange = (title: string) => {
+	const onTitleChange = (title: string): void => {
 		setInputTitle(title);
 	};
 
-	const onAuthorChange = (author: string) => {
-		const newAuthor = {
+	const onAuthorChange = (author: string): void => {
+		const newAuthor: Author = {
 			id: uuidv4(),
 			name: author,
 		};
 		setNewAuthor(newAuthor);
 	};
 
-	const createAuthor = (e: React.MouseEvent<HTMLButtonElement>) => {
+	const createAuthor = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.preventDefault();
 
 		if (!newAuthor.name || newAuthor.name.length < 2) {
@@ -106,23 +111,29 @@ function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
 	};
 
 	const addAuthor = useCallback(
-		(id: string) => {
-			const author = authorList.filter((author) => author.id === id);
+		(id: string): void => {
+			const author: Author[] = authorList.filter(
+				(author: Author): boolean => author.id === id
+			);
 			setcourseAuthorList([...courseAuthorList, ...author]);
 
-			const listAuthors = authorList.filter((author) => author.id !== id);
+			const listAuthors: Author[] = authorList.filter(
+				(author: Author): boolean => author.id !== id
+			);
 			setAuthorList(listAuthors);
 		},
 		[authorList, courseAuthorList]
 	);
 
 	const deleteAuthor = useCallback(
-		(id: string) => {
-			const author = courseAuthorList.filter((author) => author.id === id);
+		(id: string): void => {
+			const author: Author[] = courseAuthorList.filter(
+				(author: Author): boolean => author.id === id
+			);
 			setAuthorList([...authorList, ...author]);
 
-			const listCourseAuthors = courseAuthorList.filter(
-				(author) => author.id !== id
+			const listCourseAuthors: Author[] = courseAuthorList.filter(
+				(author: Author): boolean => author.id !== id
 			);
 			setcourseAuthorList(listCourseAuthors);
 		},
@@ -195,6 +206,6 @@ function CreateCourse({ createNewCourse, newAuthorList }: CreateCourseParams) {
 			</div>
 		</div>
 	);
-}
+};
 
 export default CreateCourse;
