@@ -6,17 +6,21 @@ import { BUTTON_LOGOUT } from '../../constants';
 
 import './header.css';
 
-function Header({ userName }) {
+interface HeaderProps {
+	userName: string | null;
+}
+
+const Header: React.FC<HeaderProps> = ({ userName }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
 
-	const logout = () => {
+	const logout = (): void => {
 		localStorage.removeItem('token');
 		localStorage.removeItem('name');
 		navigate('/login');
 	};
 
-	const userBlock = (
+	const userBlock: JSX.Element = (
 		<>
 			<span>{userName}</span>
 			<Button buttonText={BUTTON_LOGOUT} onButtonClick={logout} />
@@ -35,6 +39,6 @@ function Header({ userName }) {
 			</div>
 		</header>
 	);
-}
+};
 
 export default Header;

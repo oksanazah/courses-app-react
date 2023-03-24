@@ -2,12 +2,15 @@ import { Link, useParams } from 'react-router-dom';
 
 import { mockedCoursesList } from '../../constants';
 import CourseDetail from './components/CourseDetail';
+import { Course } from '../../helpers';
 
 import './course-info.css';
 
-function CourseInfo() {
-	const { courseId } = useParams();
-	const course = mockedCoursesList.find((course) => course.id === courseId);
+const CourseInfo: React.FC = () => {
+	const { courseId } = useParams<string>();
+	const course: Course | undefined = mockedCoursesList.find(
+		(course) => course.id === courseId
+	);
 
 	return (
 		<div className='course-info'>
@@ -17,6 +20,6 @@ function CourseInfo() {
 			{course ? <CourseDetail course={course} /> : <h1>Course not found</h1>}
 		</div>
 	);
-}
+};
 
 export default CourseInfo;

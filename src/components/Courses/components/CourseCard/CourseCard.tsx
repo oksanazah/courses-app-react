@@ -3,16 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../../../common/Button';
 import { BUTTON_SHOW } from '../../../../constants';
 import { pipeDuration } from '../../../../helpers';
+import type { Course } from '../../../../helpers';
 
 import './course-card.css';
 
-function CourseCard({ course, authorNames }) {
-	const { title, description, creationDate, duration } = course;
-	const authorString = authorNames.join(', ');
+interface CourseCardParams {
+	course: Course;
+	authorNames: (string | null)[];
+}
+
+const CourseCard: React.FC<CourseCardParams> = ({ course, authorNames }) => {
+	const { id, title, description, creationDate, duration } = course;
+	const authorString: string = authorNames.join(', ');
 	const navigate = useNavigate();
 
-	const onButtonClick = () => {
-		navigate(`/courses/${course.id}`);
+	const onButtonClick = (): void => {
+		navigate(`/courses/${id}`);
 	};
 
 	return (
@@ -42,6 +48,6 @@ function CourseCard({ course, authorNames }) {
 			</div>
 		</article>
 	);
-}
+};
 
 export default CourseCard;

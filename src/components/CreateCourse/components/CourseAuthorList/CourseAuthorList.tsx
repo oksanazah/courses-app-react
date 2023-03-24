@@ -1,10 +1,19 @@
 import { Button } from '../../../../common/Button';
 import { BUTTON_DELETE_AUTHOR } from '../../../../constants';
+import type { Author } from '../../../../helpers';
 
-function CourseAuthorList({ deleteAuthor, courseAuthorList }) {
-	const element = (
+interface CourseAuthorListParams {
+	deleteAuthor: (id: string) => void;
+	courseAuthorList: Author[];
+}
+
+const CourseAuthorList: React.FC<CourseAuthorListParams> = ({
+	deleteAuthor,
+	courseAuthorList,
+}) => {
+	const element: JSX.Element = (
 		<ul>
-			{courseAuthorList.map((author) => (
+			{courseAuthorList.map((author: Author) => (
 				<li key={author.id} className='author'>
 					{author.name}{' '}
 					<Button
@@ -22,6 +31,6 @@ function CourseAuthorList({ deleteAuthor, courseAuthorList }) {
 			{courseAuthorList.length === 0 ? <h5>Author list is empty</h5> : element}
 		</div>
 	);
-}
+};
 
 export default CourseAuthorList;

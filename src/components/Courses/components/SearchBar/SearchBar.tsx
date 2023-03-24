@@ -10,14 +10,20 @@ import {
 
 import './search-bar.css';
 
-function SearchBar({ onSearch, onReset }) {
-	const [inputText, setInputText] = useState('');
-	const onInputChange = (inputText) => {
+interface SearchBarParams {
+	onSearch: (text: string) => void;
+	onReset: (text: string) => void;
+}
+
+const SearchBar: React.FC<SearchBarParams> = ({ onSearch, onReset }) => {
+	const [inputText, setInputText] = useState<string>('');
+
+	const onInputChange = (inputText: string): void => {
 		setInputText(inputText);
 		onReset(inputText);
 	};
 
-	const onButtonClick = (e) => {
+	const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.preventDefault();
 		onSearch(inputText);
 	};
@@ -32,6 +38,6 @@ function SearchBar({ onSearch, onReset }) {
 			<Button buttonText={BUTTON_SEARCH} onButtonClick={onButtonClick} />
 		</div>
 	);
-}
+};
 
 export default SearchBar;

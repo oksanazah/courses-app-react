@@ -2,15 +2,23 @@ import { useState } from 'react';
 
 import './input.css';
 
-function Input({
+interface InputProps {
+	placeholderText: string;
+	inputId: string;
+	onInputChange: (text: string) => void;
+	inputType?: string;
+	labelText?: string;
+}
+
+const Input: React.FC<InputProps> = ({
 	labelText,
 	placeholderText,
 	inputId,
 	onInputChange,
 	inputType = 'text',
-}) {
-	const [inputText, setInputText] = useState('');
-	const onChange = (e) => {
+}) => {
+	const [inputText, setInputText] = useState<string>('');
+	const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		const text = e.target.value;
 		setInputText(text);
 		onInputChange(text);
@@ -30,6 +38,6 @@ function Input({
 			/>
 		</>
 	);
-}
+};
 
 export default Input;
