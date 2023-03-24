@@ -1,13 +1,15 @@
-import type { User } from './helpers';
+import type {
+	User,
+	AuthResponse,
+	CourseResponse,
+	AuthorResponse,
+	CourseInfoResponse,
+} from './helpers';
 
-interface AuthPops {
-	result: string;
-	successful: boolean;
-	user?: User;
-	errors?: string[];
-}
-
-const auth = async (user: User, url: string): Promise<AuthPops | undefined> => {
+const auth = async (
+	user: User,
+	url: string
+): Promise<AuthResponse | undefined> => {
 	const response: Response = await fetch(`http://localhost:4000/${url}`, {
 		method: 'POST',
 		body: JSON.stringify(user),
@@ -16,7 +18,7 @@ const auth = async (user: User, url: string): Promise<AuthPops | undefined> => {
 		},
 	});
 
-	const result: AuthPops = await response.json();
+	const result: AuthResponse = await response.json();
 
 	if (!response.ok) {
 		if (!result.errors) {
@@ -31,4 +33,25 @@ const auth = async (user: User, url: string): Promise<AuthPops | undefined> => {
 	return result;
 };
 
-export { auth };
+const getCoursesList = async (): Promise<CourseResponse> => {
+	const response: Response = await fetch('http://localhost:4000/courses/all');
+	const coursesList: Promise<CourseResponse> = response.json();
+
+	return coursesList;
+};
+
+const getCourseInfo = async (id: string): Promise<CourseInfoResponse> => {
+	const response: Response = await fetch(`http://localhost:4000/courses/${id}`);
+	const courseInfo: Promise<CourseInfoResponse> = response.json();
+
+	return courseInfo;
+};
+
+const getAuthorsList = async (): Promise<AuthorResponse> => {
+	const response: Response = await fetch('http://localhost:4000/authors/all');
+	const authorsList: Promise<AuthorResponse> = response.json();
+
+	return authorsList;
+};
+
+export { auth, getCoursesList, getCourseInfo, getAuthorsList };

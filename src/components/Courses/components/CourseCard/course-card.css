@@ -33,6 +33,15 @@
 }
 
 .course-card button {
-	display: block;
-	margin: 20px auto 0px;
+	display: inline-block;
+	margin-top: 20px;
+}
+
+.btns {
+	text-align: center;
+}
+
+.btn-icons button {
+	padding: 8px;
+	margin-left: 10px;
 }

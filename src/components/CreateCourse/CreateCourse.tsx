@@ -1,13 +1,17 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Input from '../../common/Input';
 import { Button } from '../../common/Button';
 import AuthorList from './components/AuthorList';
 import CourseAuthorList from './components/CourseAuthorList';
 import { dateGenerator, pipeDuration } from '../../helpers';
+import { getAuthors, createAuthor } from '../../store/authors/actionCreators';
+import { createCourse } from '../../store/courses/actionCreators';
 import type { Author, Course } from '../../helpers';
+import type { RootState } from '../../App';
 import {
 	TITLE_ID,
 	TITLE_LABEL,
@@ -22,29 +26,30 @@ import {
 	BUTTON_CREATE_AUTHOR,
 	DESCRIPTION_ID,
 	DESCRIPTION_PLACEHOLDER,
-	mockedAuthorsList,
 } from '../../constants';
 
 import './create-course.css';
 
-interface CreateCourseParams {
-	createNewCourse: (course: Course) => void;
-	newAuthorList: (authorList: Author[]) => void;
-}
+const selectAuthors = (state: RootState): Author[] => state.authors;
 
-const CreateCourse: React.FC<CreateCourseParams> = ({
-	createNewCourse,
-	newAuthorList,
-}) => {
+const CreateCourse: React.FC = () => {
 	const [inputTitle, setInputTitle] = useState<string>('');
 	const [inputDescription, setInputDescription] = useState<string>('');
 	const [inputDuration, setInputDuration] = useState<string>('');
 	const [newAuthor, setNewAuthor] = useState<Author>({ name: '', id: '' });
-	const [authorList, setAuthorList] = useState<Author[]>(mockedAuthorsList);
-	const [courseAuthorList, setcourseAuthorList] = useState<Author[]>([]);
-	const navigate = useNavigate();
 
-	const createCourse = (): void => {
+	const allAuthorList = useSelector(selectAuthors);
+	const [authorList, setAuthorList] = useState<Author[]>(allAuthorList);
+	const [courseAuthorList, setcourseAuthorList] = useState<Author[]>([]);
+
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		getAuthors().then((data) => dispatch(data));
+	}, [dispatch]);
+
+	const onCreateCourse = (): void => {
 		if (
 			inputTitle.length < 1 ||
 			inputDescription.length < 2 ||
@@ -55,15 +60,16 @@ const CreateCourse: React.FC<CreateCourseParams> = ({
 			return;
 		}
 
-		newAuthorList([...courseAuthorList, ...authorList]);
-		createNewCourse({
+		const newCourse: Course = {
 			id: uuidv4(),
 			title: inputTitle,
 			description: inputDescription,
 			creationDate: dateGenerator(),
 			duration: Number(inputDuration),
 			authors: courseAuthorList.map((author: Author): string => author.id),
-		});
+		};
+
+		dispatch(createCourse(newCourse));
 		navigate('/courses');
 	};
 
@@ -73,7 +79,7 @@ const CreateCourse: React.FC<CreateCourseParams> = ({
 			return;
 		}
 
-		setInputDuration(inputDuration);
+		setInputDuration(inputDuration.trim());
 	};
 
 	const onDescriptionChange = (
@@ -85,28 +91,29 @@ const CreateCourse: React.FC<CreateCourseParams> = ({
 			return;
 		}
 
-		setInputDescription(text);
+		setInputDescription(text.trim());
 	};
 
 	const onTitleChange = (title: string): void => {
-		setInputTitle(title);
+		setInputTitle(title.trim());
 	};
 
 	const onAuthorChange = (author: string): void => {
 		const newAuthor: Author = {
 			id: uuidv4(),
-			name: author,
+			name: author.trim(),
 		};
 		setNewAuthor(newAuthor);
 	};
 
-	const createAuthor = (e: React.MouseEvent<HTMLButtonElement>): void => {
+	const onCreateAuthor = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.preventDefault();
 
 		if (!newAuthor.name || newAuthor.name.length < 2) {
 			return;
 		}
 
+		dispatch(createAuthor(newAuthor));
 		setAuthorList([...authorList, newAuthor]);
 	};
 
@@ -152,7 +159,7 @@ const CreateCourse: React.FC<CreateCourseParams> = ({
 					/>
 				</div>
 				<div className='create-button'>
-					<Button buttonText={BUTTON_CREATE} onButtonClick={createCourse} />
+					<Button buttonText={BUTTON_CREATE} onButtonClick={onCreateCourse} />
 				</div>
 			</div>
 
@@ -179,7 +186,7 @@ const CreateCourse: React.FC<CreateCourseParams> = ({
 					<div className='create-author-button'>
 						<Button
 							buttonText={BUTTON_CREATE_AUTHOR}
-							onButtonClick={createAuthor}
+							onButtonClick={onCreateAuthor}
 						/>
 					</div>
 				</div>

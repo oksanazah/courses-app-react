@@ -1,22 +1,36 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
 import { Button } from '../../common/Button';
 import { BUTTON_ADD } from '../../constants';
+import { getCourses } from '../../store/courses/actionCreators';
+import { getAuthors } from '../../store/authors/actionCreators';
 import type { Course, Author } from '../../helpers';
+import { RootState } from '../../App';
 
 import './courses.css';
 
-interface CoursesParams {
-	courseList: Course[];
-	authorList: Author[];
-}
+const selectCourses = (state: RootState): Course[] => state.courses;
+const selectAuthors = (state: RootState): Author[] => state.authors;
 
-const Courses: React.FC<CoursesParams> = ({ courseList, authorList }) => {
+const Courses: React.FC = () => {
 	const navigate = useNavigate();
 	const [inputText, setInputText] = useState<string>('');
+
+	const dispatch = useDispatch();
+	const courseList: Course[] = useSelector(selectCourses);
+	const authorList: Author[] = useSelector(selectAuthors);
+
+	useEffect(() => {
+		getCourses().then((data) => dispatch(data));
+	}, [dispatch]);
+
+	useEffect(() => {
+		getAuthors().then((data) => dispatch(data));
+	}, [dispatch]);
 
 	useEffect((): void => {
 		if (localStorage.getItem('token') === null) {

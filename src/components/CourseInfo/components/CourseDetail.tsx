@@ -1,6 +1,10 @@
-import { mockedAuthorsList } from '../../../constants';
-import { pipeDuration } from '../../../helpers';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { getAuthors } from '../../../store/authors/actionCreators';
+import { pipeDuration } from '../../../helpers';
+import type { RootState } from '../../../App';
+import type { Author } from '../../../helpers';
 interface CourseDetailProps {
 	course: {
 		title: string;
@@ -12,9 +16,18 @@ interface CourseDetailProps {
 	};
 }
 
+const selectAuthors = (state: RootState): Author[] => state.authors;
+
 const CourseDetail: React.FC<CourseDetailProps> = ({
 	course: { title, description, id, duration, creationDate, authors },
 }) => {
+	const dispatch = useDispatch();
+	const authorList: Author[] = useSelector(selectAuthors);
+
+	useEffect((): void => {
+		getAuthors().then((data) => dispatch(data));
+	}, [dispatch]);
+
 	return (
 		<>
 			<h1>{title}</h1>
@@ -41,7 +54,7 @@ const CourseDetail: React.FC<CourseDetailProps> = ({
 						</li>
 						<ul className='authors'>
 							{authors.map((author) => {
-								const auth = mockedAuthorsList.find(
+								const auth = authorList.find(
 									(mockedAuthor) => mockedAuthor.id === author
 								);
 								return <li key={auth?.id}>{auth?.name}</li>;

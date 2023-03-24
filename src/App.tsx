@@ -5,34 +5,28 @@ import {
 	Route,
 	Navigate,
 } from 'react-router-dom';
+import { legacy_createStore as createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
+import rootReducer from './store';
 import Header from './components/Header';
 import Courses from './components/Courses';
 import CreateCourse from './components/CreateCourse';
 import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration';
 import Login from './components/Login/Login';
-import { mockedAuthorsList, mockedCoursesList } from './constants';
-import type { Course, Author } from './helpers/interfaces';
 
 import './App.css';
 
+const store = createStore(rootReducer, composeWithDevTools());
+type RootState = ReturnType<typeof store.getState>;
+
 const App: React.FC = () => {
-	const [courseList, setCourseList] = useState<Course[]>(mockedCoursesList);
-	const [authorList, setAuthorList] = useState<Author[]>(mockedAuthorsList);
 	const [userName, setUserName] = useState<string | null>('');
 
 	useEffect(() => {
 		setUserName(localStorage.getItem('name'));
 	}, []);
-
-	const newAuthorList = (authorList: Author[]): void => {
-		setAuthorList(authorList);
-	};
-
-	const createNewCourse = (course: Course): void => {
-		setCourseList([...courseList, course]);
-	};
 
 	return (
 		<Router>
@@ -50,21 +44,8 @@ const App: React.FC = () => {
 						}
 					/>
 					?
-					<Route
-						path='/courses/add'
-						element={
-							<CreateCourse
-								createNewCourse={createNewCourse}
-								newAuthorList={newAuthorList}
-							/>
-						}
-					/>
-					<Route
-						path='/courses'
-						element={
-							<Courses courseList={courseList} authorList={authorList} />
-						}
-					/>
+					<Route path='/courses/add' element={<CreateCourse />} />
+					<Route path='/courses' element={<Courses />} />
 					<Route path='/courses/:courseId' element={<CourseInfo />} />
 					<Route path='/registration' element={<Registration />} />
 					<Route path='/login' element={<Login />} />
@@ -75,3 +56,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+export { store, RootState };

@@ -44,7 +44,9 @@ const Login: React.FC = () => {
 		localStorage.setItem('token', `${result?.result}`);
 		localStorage.setItem('name', `${result?.user?.name}`);
 
-		navigate('/courses');
+		if (result) {
+			navigate('/courses');
+		}
 	};
 
 	return (
