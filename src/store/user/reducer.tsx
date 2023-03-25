@@ -23,6 +23,9 @@ const userReducer = (
 				token: action.payload.result,
 			};
 
+		case ON_LOGOUT:
+			return userInitialState;
+
 		default:
 			return state;
 	}

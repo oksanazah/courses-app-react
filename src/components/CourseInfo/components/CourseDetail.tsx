@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getAuthors } from '../../../store/authors/actionCreators';
-import { pipeDuration } from '../../../helpers';
-import type { RootState } from '../../../App';
+import { pipeDuration, selectAuthors } from '../../../helpers';
 import type { Author } from '../../../helpers';
 interface CourseDetailProps {
 	course: {
@@ -15,8 +14,6 @@ interface CourseDetailProps {
 		authors: string[];
 	};
 }
-
-const selectAuthors = (state: RootState): Author[] => state.authors;
 
 const CourseDetail: React.FC<CourseDetailProps> = ({
 	course: { title, description, id, duration, creationDate, authors },

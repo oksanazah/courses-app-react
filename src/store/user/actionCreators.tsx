@@ -13,3 +13,7 @@ export const onLogin = (
 
 	return res;
 };
+
+export const onLogout = (): { type: string } => ({
+	type: ON_LOGOUT,
+});

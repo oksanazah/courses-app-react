@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
 	BrowserRouter as Router,
 	Routes,
@@ -6,6 +6,7 @@ import {
 	Navigate,
 } from 'react-router-dom';
 import { legacy_createStore as createStore } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import rootReducer from './store';
@@ -15,6 +16,10 @@ import CreateCourse from './components/CreateCourse';
 import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration';
 import Login from './components/Login/Login';
+import { getCourses } from './store/courses/actionCreators';
+import { getAuthors } from './store/authors/actionCreators';
+import { selectUser } from './helpers';
+import type { User } from './helpers';
 
 import './App.css';
 
@@ -22,16 +27,21 @@ const store = createStore(rootReducer, composeWithDevTools());
 type RootState = ReturnType<typeof store.getState>;
 
 const App: React.FC = () => {
-	const [userName, setUserName] = useState<string | null>('');
+	const dispatch = useDispatch();
+	const userName: User = useSelector(selectUser);
 
 	useEffect(() => {
-		setUserName(localStorage.getItem('name'));
-	}, []);
+		getCourses().then((data) => dispatch(data));
+	}, [dispatch]);
+
+	useEffect(() => {
+		getAuthors().then((data) => dispatch(data));
+	}, [dispatch]);
 
 	return (
 		<Router>
 			<div className='app'>
-				<Header userName={userName} />
+				<Header userName={userName.name} />
 				<Routes>
 					<Route
 						path='/'

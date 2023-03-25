@@ -1,4 +1,9 @@
-import { GET_COURSES, DELETE_COURSE, CREATE_COURSE } from './actionTypes';
+import {
+	GET_COURSES,
+	DELETE_COURSE,
+	CREATE_COURSE,
+	UPDATE_COURSE,
+} from './actionTypes';
 import { getCoursesList } from '../../services';
 import type { Course, CourseResponse } from '../../helpers';
 
@@ -18,22 +23,23 @@ export const getCourses = (): Promise<CourseAction> => {
 	return res;
 };
 
-export const deleteCourse = (id: string): Promise<CourseAction> => {
-	const res = getCoursesList().then(
-		(data: CourseResponse): CourseAction => ({
-			type: DELETE_COURSE,
-			payload: data.result.filter(
-				(course: Course): boolean => course.id !== id
-			),
-		})
-	);
-
-	return res;
-};
+export const deleteCourse = (
+	id: string
+): { type: string; payload: string } => ({
+	type: DELETE_COURSE,
+	payload: id,
+});
 
 export const createCourse = (
 	course: Course
 ): { type: string; payload: Course } => ({
 	type: CREATE_COURSE,
+	payload: course,
+});
+
+export const updateCourse = (
+	course: Course
+): { type: string; payload: Course } => ({
+	type: UPDATE_COURSE,
 	payload: course,
 });

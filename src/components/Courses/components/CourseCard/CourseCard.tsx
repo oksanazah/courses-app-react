@@ -25,7 +25,7 @@ const CourseCard: React.FC<CourseCardParams> = ({ course, authorNames }) => {
 	};
 
 	const onDelete = (): void => {
-		deleteCourse(id).then((data) => dispatch(data));
+		dispatch(deleteCourse(id));
 	};
 
 	return (

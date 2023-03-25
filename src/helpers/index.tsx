@@ -1,5 +1,6 @@
 import { pipeDuration } from './pipeDuration';
 import { dateGenerator } from './dateGenerator';
+import { selectUser, selectAuthors, selectCourses } from './selectors';
 import type {
 	Course,
 	Author,
@@ -22,4 +23,7 @@ export {
 	CourseResponse,
 	AuthorResponse,
 	CourseInfoResponse,
+	selectUser,
+	selectAuthors,
+	selectCourses,
 };

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
 import { auth } from '../../services';
-import { User } from '../../helpers';
+import type { User } from '../../helpers';
 import {
 	USER_NAME_ID,
 	USER_NAME_LABEL,

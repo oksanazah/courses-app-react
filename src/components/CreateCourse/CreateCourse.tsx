@@ -7,11 +7,10 @@ import Input from '../../common/Input';
 import { Button } from '../../common/Button';
 import AuthorList from './components/AuthorList';
 import CourseAuthorList from './components/CourseAuthorList';
-import { dateGenerator, pipeDuration } from '../../helpers';
+import { dateGenerator, pipeDuration, selectAuthors } from '../../helpers';
 import { getAuthors, createAuthor } from '../../store/authors/actionCreators';
 import { createCourse } from '../../store/courses/actionCreators';
 import type { Author, Course } from '../../helpers';
-import type { RootState } from '../../App';
 import {
 	TITLE_ID,
 	TITLE_LABEL,
@@ -29,8 +28,6 @@ import {
 } from '../../constants';
 
 import './create-course.css';
-
-const selectAuthors = (state: RootState): Author[] => state.authors;
 
 const CreateCourse: React.FC = () => {
 	const [inputTitle, setInputTitle] = useState<string>('');
