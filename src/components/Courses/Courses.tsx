@@ -6,7 +6,7 @@ import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
 import { Button } from '../../common/Button';
 import { BUTTON_ADD } from '../../constants';
-import { selectCourses, selectAuthors } from '../../helpers';
+import { selectCourses, selectAuthors } from '../../store';
 import type { Course, Author } from '../../helpers';
 
 import './courses.css';
@@ -39,6 +39,10 @@ const Courses: React.FC = () => {
 	};
 
 	const foundCourses: Course[] = useMemo<Course[]>((): Course[] => {
+		if (courseList.length === 0) {
+			navigate('/error');
+		}
+
 		if (inputText.length === 0) {
 			return courseList;
 		}
@@ -48,7 +52,7 @@ const Courses: React.FC = () => {
 				course.title.toLowerCase().indexOf(inputText.toLowerCase()) > -1 ||
 				course.id.toLowerCase().indexOf(inputText.toLowerCase()) > -1
 		);
-	}, [courseList, inputText]);
+	}, [courseList, inputText, navigate]);
 
 	return (
 		<div className='courses'>

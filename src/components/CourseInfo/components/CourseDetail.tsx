@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { getAuthors } from '../../../store/authors/actionCreators';
-import { pipeDuration, selectAuthors } from '../../../helpers';
+import { pipeDuration } from '../../../helpers';
+import { selectAuthors } from '../../../store';
 import type { Author } from '../../../helpers';
+
 interface CourseDetailProps {
 	course: {
 		title: string;

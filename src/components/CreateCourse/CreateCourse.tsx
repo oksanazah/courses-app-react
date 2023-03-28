@@ -7,9 +7,10 @@ import Input from '../../common/Input';
 import { Button } from '../../common/Button';
 import AuthorList from './components/AuthorList';
 import CourseAuthorList from './components/CourseAuthorList';
-import { dateGenerator, pipeDuration, selectAuthors } from '../../helpers';
+import { dateGenerator, pipeDuration } from '../../helpers';
 import { getAuthors, createAuthor } from '../../store/authors/actionCreators';
 import { createCourse } from '../../store/courses/actionCreators';
+import { selectAuthors } from '../../store';
 import type { Author, Course } from '../../helpers';
 import {
 	TITLE_ID,

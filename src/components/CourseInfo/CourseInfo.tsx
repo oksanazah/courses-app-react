@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import CourseDetail from './components/CourseDetail';
 import { getCourseInfo } from '../../services';
-import type { Course, CourseInfoResponse } from '../../helpers';
+import type { Course } from '../../helpers';
 
 import './course-info.css';
 
@@ -13,11 +13,15 @@ const CourseInfo: React.FC = () => {
 
 	useEffect(() => {
 		if (courseId) {
-			getCourseInfo(courseId).then((data: CourseInfoResponse): void => {
-				if (data.successful) {
+			const fetchCourseInfo = async (): Promise<void> => {
+				const data = await getCourseInfo(courseId);
+
+				if (data?.successful) {
 					setCourse(data.result);
 				}
-			});
+			};
+
+			fetchCourseInfo();
 		}
 	}, [courseId]);
 

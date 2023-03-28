@@ -4,7 +4,7 @@ import type { Author, AuthorResponse } from '../../helpers';
 
 interface AuthorAction {
 	type: string;
-	payload: Author[];
+	payload: Author[] | undefined;
 }
 
 export const getAuthors = (): Promise<AuthorAction> => {

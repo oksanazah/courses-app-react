@@ -1,4 +1,4 @@
-import type { RootState } from '../App';
+import type { RootState } from '.';
 import type { Course, Author, User } from '../helpers';
 
 export const selectUser = (state: RootState): User => state.user;

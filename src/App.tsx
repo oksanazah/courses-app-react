@@ -5,37 +5,42 @@ import {
 	Route,
 	Navigate,
 } from 'react-router-dom';
-import { legacy_createStore as createStore } from 'redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 
-import rootReducer from './store';
 import Header from './components/Header';
 import Courses from './components/Courses';
 import CreateCourse from './components/CreateCourse';
 import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration';
 import Login from './components/Login/Login';
+import ErrorPage from './components/ErrorPage';
 import { getCourses } from './store/courses/actionCreators';
 import { getAuthors } from './store/authors/actionCreators';
-import { selectUser } from './helpers';
-import type { User } from './helpers';
+import { selectUser } from './store';
 
 import './App.css';
 
-const store = createStore(rootReducer, composeWithDevTools());
-type RootState = ReturnType<typeof store.getState>;
-
 const App: React.FC = () => {
 	const dispatch = useDispatch();
-	const userName: User = useSelector(selectUser);
+	const userName = useSelector(selectUser);
 
 	useEffect(() => {
-		getCourses().then((data) => dispatch(data));
+		const fetchCourses = async (): Promise<void> => {
+			const data = await getCourses();
+
+			dispatch(data);
+		};
+
+		fetchCourses();
 	}, [dispatch]);
 
 	useEffect(() => {
-		getAuthors().then((data) => dispatch(data));
+		const fetchAuthors = async (): Promise<void> => {
+			const data = await getAuthors();
+			dispatch(data);
+		};
+
+		fetchAuthors();
 	}, [dispatch]);
 
 	return (
@@ -59,6 +64,7 @@ const App: React.FC = () => {
 					<Route path='/courses/:courseId' element={<CourseInfo />} />
 					<Route path='/registration' element={<Registration />} />
 					<Route path='/login' element={<Login />} />
+					<Route path='/error' element={<ErrorPage />} />
 				</Routes>
 			</div>
 		</Router>
@@ -66,4 +72,3 @@ const App: React.FC = () => {
 };
 
 export default App;
-export { store, RootState };

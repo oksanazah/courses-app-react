@@ -1,0 +1,10 @@
+.error {
+	border: 1px solid #31c5ac;
+	border-radius: 2px;
+	padding: 20px 40px 40px 40px;
+}
+
+.error h1 {
+	text-align: center;
+	margin-bottom: 40px;
+}

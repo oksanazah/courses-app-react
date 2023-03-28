@@ -34,24 +34,40 @@ const auth = async (
 };
 
 const getCoursesList = async (): Promise<CourseResponse> => {
-	const response: Response = await fetch('http://localhost:4000/courses/all');
-	const coursesList: Promise<CourseResponse> = response.json();
+	try {
+		const response: Response = await fetch('http://localhost:4000/courses/all');
+		const coursesList: Promise<CourseResponse> = response.json();
 
-	return coursesList;
+		return coursesList;
+	} catch (error) {
+		return { result: [], successful: false };
+	}
 };
 
-const getCourseInfo = async (id: string): Promise<CourseInfoResponse> => {
-	const response: Response = await fetch(`http://localhost:4000/courses/${id}`);
-	const courseInfo: Promise<CourseInfoResponse> = response.json();
+const getCourseInfo = async (
+	id: string
+): Promise<CourseInfoResponse | undefined> => {
+	try {
+		const response: Response = await fetch(
+			`http://localhost:4000/courses/${id}`
+		);
+		const courseInfo: Promise<CourseInfoResponse> = response.json();
 
-	return courseInfo;
+		return courseInfo;
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 const getAuthorsList = async (): Promise<AuthorResponse> => {
-	const response: Response = await fetch('http://localhost:4000/authors/all');
-	const authorsList: Promise<AuthorResponse> = response.json();
+	try {
+		const response: Response = await fetch('http://localhost:4000/authors/all');
+		const authorsList: Promise<AuthorResponse> = response.json();
 
-	return authorsList;
+		return authorsList;
+	} catch (error) {
+		return { result: [], successful: false };
+	}
 };
 
 export { auth, getCoursesList, getCourseInfo, getAuthorsList };

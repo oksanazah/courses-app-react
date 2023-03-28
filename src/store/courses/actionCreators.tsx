@@ -9,7 +9,7 @@ import type { Course, CourseResponse } from '../../helpers';
 
 interface CourseAction {
 	type: string;
-	payload: Course[];
+	payload: Course[] | undefined;
 }
 
 export const getCourses = (): Promise<CourseAction> => {

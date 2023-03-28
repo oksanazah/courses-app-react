@@ -19,8 +19,6 @@ const Header: React.FC<HeaderProps> = ({ userName }) => {
 
 	const logout = (): void => {
 		dispatch(onLogout());
-		localStorage.removeItem('token');
-		localStorage.removeItem('name');
 		navigate('/login');
 	};
 

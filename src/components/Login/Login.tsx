@@ -44,9 +44,6 @@ const Login: React.FC = () => {
 
 		const result = await onLogin(user, 'login');
 
-		localStorage.setItem('token', `${result.payload?.result}`);
-		localStorage.setItem('name', `${result.payload?.user?.name}`);
-
 		if (result.payload) {
 			dispatch(result);
 			navigate('/courses');

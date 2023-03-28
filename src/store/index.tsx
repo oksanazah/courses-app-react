@@ -1,10 +1,5 @@
-import { combineReducers } from 'redux';
-import userReducer from './user/reducer';
-import coursesReducer from './courses/reducer';
-import authorsReducer from './authors/reducer';
+import { store } from './store';
+import { selectUser, selectAuthors, selectCourses } from './selectors';
+import type { RootState } from './store';
 
-export default combineReducers({
-	user: userReducer,
-	courses: coursesReducer,
-	authors: authorsReducer,
-});
+export { store, RootState, selectUser, selectAuthors, selectCourses };
