@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
-import { auth } from '../../services';
+import { onLogin } from '../../store/user/actionCreators';
 import type { User } from '../../helpers';
 import {
 	USER_EMAIL_ID,
@@ -19,6 +20,8 @@ import './login.css';
 
 const Login: React.FC = () => {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
 	const user: User = {
@@ -39,12 +42,12 @@ const Login: React.FC = () => {
 	): Promise<void> => {
 		e.preventDefault();
 
-		const result = await auth(user, 'login');
+		const result = await onLogin(user, 'login');
 
-		localStorage.setItem('token', `${result?.result}`);
-		localStorage.setItem('name', `${result?.user?.name}`);
-
-		navigate('/courses');
+		if (result.payload) {
+			dispatch(result);
+			navigate('/courses');
+		}
 	};
 
 	return (

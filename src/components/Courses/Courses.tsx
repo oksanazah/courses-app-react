@@ -1,22 +1,22 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
 import { Button } from '../../common/Button';
 import { BUTTON_ADD } from '../../constants';
+import { selectCourses, selectAuthors } from '../../store';
 import type { Course, Author } from '../../helpers';
 
 import './courses.css';
 
-interface CoursesParams {
-	courseList: Course[];
-	authorList: Author[];
-}
-
-const Courses: React.FC<CoursesParams> = ({ courseList, authorList }) => {
+const Courses: React.FC = () => {
 	const navigate = useNavigate();
 	const [inputText, setInputText] = useState<string>('');
+
+	const courseList: Course[] = useSelector(selectCourses);
+	const authorList: Author[] = useSelector(selectAuthors);
 
 	useEffect((): void => {
 		if (localStorage.getItem('token') === null) {
@@ -39,6 +39,10 @@ const Courses: React.FC<CoursesParams> = ({ courseList, authorList }) => {
 	};
 
 	const foundCourses: Course[] = useMemo<Course[]>((): Course[] => {
+		if (courseList.length === 0) {
+			navigate('/error');
+		}
+
 		if (inputText.length === 0) {
 			return courseList;
 		}
@@ -48,7 +52,7 @@ const Courses: React.FC<CoursesParams> = ({ courseList, authorList }) => {
 				course.title.toLowerCase().indexOf(inputText.toLowerCase()) > -1 ||
 				course.id.toLowerCase().indexOf(inputText.toLowerCase()) > -1
 		);
-	}, [courseList, inputText]);
+	}, [courseList, inputText, navigate]);
 
 	return (
 		<div className='courses'>

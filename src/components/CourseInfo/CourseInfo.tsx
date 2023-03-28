@@ -1,16 +1,29 @@
+import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-import { mockedCoursesList } from '../../constants';
 import CourseDetail from './components/CourseDetail';
-import { Course } from '../../helpers';
+import { getCourseInfo } from '../../services';
+import type { Course } from '../../helpers';
 
 import './course-info.css';
 
 const CourseInfo: React.FC = () => {
+	const [course, setCourse] = useState<Course>();
 	const { courseId } = useParams<string>();
-	const course: Course | undefined = mockedCoursesList.find(
-		(course) => course.id === courseId
-	);
+
+	useEffect(() => {
+		if (courseId) {
+			const fetchCourseInfo = async (): Promise<void> => {
+				const data = await getCourseInfo(courseId);
+
+				if (data?.successful) {
+					setCourse(data.result);
+				}
+			};
+
+			fetchCourseInfo();
+		}
+	}, [courseId]);
 
 	return (
 		<div className='course-info'>

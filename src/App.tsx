@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
 	BrowserRouter as Router,
 	Routes,
 	Route,
 	Navigate,
 } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Header from './components/Header';
 import Courses from './components/Courses';
@@ -12,32 +13,40 @@ import CreateCourse from './components/CreateCourse';
 import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration';
 import Login from './components/Login/Login';
-import { mockedAuthorsList, mockedCoursesList } from './constants';
-import type { Course, Author } from './helpers/interfaces';
+import ErrorPage from './components/ErrorPage';
+import { getCourses } from './store/courses/actionCreators';
+import { getAuthors } from './store/authors/actionCreators';
+import { selectUser } from './store';
 
 import './App.css';
 
 const App: React.FC = () => {
-	const [courseList, setCourseList] = useState<Course[]>(mockedCoursesList);
-	const [authorList, setAuthorList] = useState<Author[]>(mockedAuthorsList);
-	const [userName, setUserName] = useState<string | null>('');
+	const dispatch = useDispatch();
+	const userName = useSelector(selectUser);
 
 	useEffect(() => {
-		setUserName(localStorage.getItem('name'));
-	}, []);
+		const fetchCourses = async (): Promise<void> => {
+			const data = await getCourses();
 
-	const newAuthorList = (authorList: Author[]): void => {
-		setAuthorList(authorList);
-	};
+			dispatch(data);
+		};
 
-	const createNewCourse = (course: Course): void => {
-		setCourseList([...courseList, course]);
-	};
+		fetchCourses();
+	}, [dispatch]);
+
+	useEffect(() => {
+		const fetchAuthors = async (): Promise<void> => {
+			const data = await getAuthors();
+			dispatch(data);
+		};
+
+		fetchAuthors();
+	}, [dispatch]);
 
 	return (
 		<Router>
 			<div className='app'>
-				<Header userName={userName} />
+				<Header userName={userName.name} />
 				<Routes>
 					<Route
 						path='/'
@@ -50,24 +59,12 @@ const App: React.FC = () => {
 						}
 					/>
 					?
-					<Route
-						path='/courses/add'
-						element={
-							<CreateCourse
-								createNewCourse={createNewCourse}
-								newAuthorList={newAuthorList}
-							/>
-						}
-					/>
-					<Route
-						path='/courses'
-						element={
-							<Courses courseList={courseList} authorList={authorList} />
-						}
-					/>
+					<Route path='/courses/add' element={<CreateCourse />} />
+					<Route path='/courses' element={<Courses />} />
 					<Route path='/courses/:courseId' element={<CourseInfo />} />
 					<Route path='/registration' element={<Registration />} />
 					<Route path='/login' element={<Login />} />
+					<Route path='/error' element={<ErrorPage />} />
 				</Routes>
 			</div>
 		</Router>

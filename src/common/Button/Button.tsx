@@ -1,7 +1,7 @@
 import './button.css';
 
 interface ButtonProps {
-	buttonText: string;
+	buttonText: string | JSX.Element;
 	onButtonClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
