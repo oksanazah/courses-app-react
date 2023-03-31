@@ -5,42 +5,30 @@ import {
 	Route,
 	Navigate,
 } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Header from './components/Header';
 import Courses from './components/Courses';
-import CreateCourse from './components/CreateCourse';
+import CourseForm from './components/CourseForm';
 import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration';
 import Login from './components/Login/Login';
-import ErrorPage from './components/ErrorPage';
-import { getCourses } from './store/courses/actionCreators';
-import { getAuthors } from './store/authors/actionCreators';
-import { selectUser } from './store';
+import PrivateRoute from './components/PrivateRoute';
+import { getUserThunk } from './store/user/thunk';
+import { selectUser, useAppDispatch } from './store';
 
 import './App.css';
 
 const App: React.FC = () => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const userName = useSelector(selectUser);
 
 	useEffect(() => {
-		const fetchCourses = async (): Promise<void> => {
-			const data = await getCourses();
+		const token = localStorage.getItem('token');
 
-			dispatch(data);
-		};
-
-		fetchCourses();
-	}, [dispatch]);
-
-	useEffect(() => {
-		const fetchAuthors = async (): Promise<void> => {
-			const data = await getAuthors();
-			dispatch(data);
-		};
-
-		fetchAuthors();
+		if (token) {
+			dispatch(getUserThunk(token));
+		}
 	}, [dispatch]);
 
 	return (
@@ -58,13 +46,26 @@ const App: React.FC = () => {
 							)
 						}
 					/>
-					?
-					<Route path='/courses/add' element={<CreateCourse />} />
-					<Route path='/courses' element={<Courses />} />
-					<Route path='/courses/:courseId' element={<CourseInfo />} />
 					<Route path='/registration' element={<Registration />} />
 					<Route path='/login' element={<Login />} />
-					<Route path='/error' element={<ErrorPage />} />
+					<Route path='/courses' element={<Courses />} />
+					<Route path='/courses/:courseId' element={<CourseInfo />} />
+					<Route
+						path='/courses/add'
+						element={
+							<PrivateRoute>
+								<CourseForm />
+							</PrivateRoute>
+						}
+					/>
+					<Route
+						path='/courses/update/:courseId'
+						element={
+							<PrivateRoute>
+								<CourseForm />
+							</PrivateRoute>
+						}
+					/>
 				</Routes>
 			</div>
 		</Router>

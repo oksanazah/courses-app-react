@@ -1,5 +1,4 @@
 import { GET_AUTHORS, CREATE_AUTHOR } from './actionTypes';
-import { getAuthorsList } from '../../services';
 import type { Author, AuthorResponse } from '../../helpers';
 
 interface AuthorAction {
@@ -7,16 +6,10 @@ interface AuthorAction {
 	payload: Author[] | undefined;
 }
 
-export const getAuthors = (): Promise<AuthorAction> => {
-	const res = getAuthorsList().then(
-		(data: AuthorResponse): AuthorAction => ({
-			type: GET_AUTHORS,
-			payload: data.result,
-		})
-	);
-
-	return res;
-};
+export const getAuthors = (data: AuthorResponse): AuthorAction => ({
+	type: GET_AUTHORS,
+	payload: data.result,
+});
 
 export const createAuthor = (
 	author: Author

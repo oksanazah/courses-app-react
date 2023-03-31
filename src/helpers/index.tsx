@@ -5,10 +5,13 @@ import type {
 	Author,
 	User,
 	UserState,
+	UserResponse,
 	AuthResponse,
+	NewAuthorResponse,
 	CourseResponse,
 	AuthorResponse,
 	CourseInfoResponse,
+	DeleteResponse,
 } from './interfaces';
 
 export {
@@ -18,8 +21,11 @@ export {
 	Author,
 	User,
 	UserState,
+	UserResponse,
 	AuthResponse,
 	CourseResponse,
 	AuthorResponse,
+	NewAuthorResponse,
 	CourseInfoResponse,
+	DeleteResponse,
 };

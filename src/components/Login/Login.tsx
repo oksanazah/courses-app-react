@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
-import { onLogin } from '../../store/user/actionCreators';
+import { auth } from '../../services';
+import { useAppDispatch } from '../../store';
+import { onLoginThunk } from '../../store/user/thunk';
 import type { User } from '../../helpers';
 import {
 	USER_EMAIL_ID,
@@ -20,7 +21,7 @@ import './login.css';
 
 const Login: React.FC = () => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
@@ -42,10 +43,11 @@ const Login: React.FC = () => {
 	): Promise<void> => {
 		e.preventDefault();
 
-		const result = await onLogin(user, 'login');
+		dispatch(onLoginThunk(user, 'login'));
 
-		if (result.payload) {
-			dispatch(result);
+		const data = await auth(user, 'login');
+
+		if (data?.result) {
 			navigate('/courses');
 		}
 	};

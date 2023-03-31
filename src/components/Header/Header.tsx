@@ -1,10 +1,10 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import { Button } from '../../common/Button';
 import { Logo } from './components/Logo';
 import { BUTTON_LOGOUT } from '../../constants';
-import { onLogout } from '../../store/user/actionCreators';
+import { onLogoutThunk } from '../../store/user/thunk';
+import { useAppDispatch } from '../../store';
 
 import './header.css';
 
@@ -15,10 +15,14 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ userName }) => {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const logout = (): void => {
-		dispatch(onLogout());
+		const token = localStorage.getItem('token');
+
+		if (token) {
+			dispatch(onLogoutThunk(token));
+		}
 		navigate('/login');
 	};
 

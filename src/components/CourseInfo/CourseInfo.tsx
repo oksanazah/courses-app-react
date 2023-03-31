@@ -11,10 +11,12 @@ const CourseInfo: React.FC = () => {
 	const [course, setCourse] = useState<Course>();
 	const { courseId } = useParams<string>();
 
-	useEffect(() => {
-		if (courseId) {
+	useEffect((): void => {
+		const token = localStorage.getItem('token');
+
+		if (courseId && token) {
 			const fetchCourseInfo = async (): Promise<void> => {
-				const data = await getCourseInfo(courseId);
+				const data = await getCourseInfo(courseId, token);
 
 				if (data?.successful) {
 					setCourse(data.result);

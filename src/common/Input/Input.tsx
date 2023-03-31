@@ -8,6 +8,7 @@ interface InputProps {
 	onInputChange: (text: string) => void;
 	inputType?: string;
 	labelText?: string;
+	inputText?: string;
 }
 
 const Input: React.FC<InputProps> = ({

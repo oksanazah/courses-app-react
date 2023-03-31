@@ -3,6 +3,7 @@ const BUTTON_SHOW = 'Show course';
 const BUTTON_SEARCH = 'Search';
 const BUTTON_ADD = 'Add new course';
 const BUTTON_CREATE = 'Create course';
+const BUTTON_UPDATE = 'Update course';
 const BUTTON_CREATE_AUTHOR = 'Create author';
 const BUTTON_ADD_AUTHOR = 'Add author';
 const BUTTON_DELETE_AUTHOR = 'Delete author';
@@ -79,6 +80,7 @@ export {
 	BUTTON_SEARCH,
 	BUTTON_ADD,
 	BUTTON_CREATE,
+	BUTTON_UPDATE,
 	BUTTON_CREATE_AUTHOR,
 	BUTTON_ADD_AUTHOR,
 	BUTTON_DELETE_AUTHOR,
