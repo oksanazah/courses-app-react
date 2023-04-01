@@ -6,11 +6,11 @@ import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
 import { Button } from '../../common/Button';
 import { BUTTON_ADD } from '../../constants';
-import { selectCourses, selectAuthors } from '../../store';
+import { selectCourses, selectAuthors, selectUser } from '../../store';
 import { getCoursesThunk } from '../../store/courses/thunk';
 import { getAuthorsThunk } from '../../store/authors/thunk';
 import { useAppDispatch } from '../../store';
-import type { Course, Author } from '../../helpers';
+import type { Course, Author, User } from '../../helpers';
 
 import './courses.css';
 
@@ -21,12 +21,13 @@ const Courses: React.FC = () => {
 
 	const courseList: Course[] = useSelector(selectCourses);
 	const authorList: Author[] = useSelector(selectAuthors);
+	const { isAuth }: User = useSelector(selectUser);
 
 	useEffect((): void => {
-		if (localStorage.getItem('token') === null) {
-			navigate('/login');
+		if (!isAuth) {
+			navigate('/');
 		}
-	}, [navigate]);
+	}, [navigate, isAuth]);
 
 	useEffect(() => {
 		dispatch(getCoursesThunk());

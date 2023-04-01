@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
-import { auth } from '../../services';
-import { useAppDispatch } from '../../store';
+import { selectUser, useAppDispatch } from '../../store';
 import { onLoginThunk } from '../../store/user/thunk';
 import type { User } from '../../helpers';
 import {
@@ -22,6 +22,7 @@ import './login.css';
 const Login: React.FC = () => {
 	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
+	const { isAuth }: User = useSelector(selectUser);
 
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
@@ -29,6 +30,10 @@ const Login: React.FC = () => {
 		email,
 		password,
 	};
+
+	useEffect(() => {
+		if (isAuth) navigate('/courses');
+	}, [isAuth, navigate]);
 
 	const onEmailChange = (email: string): void => {
 		setEmail(email);
@@ -44,12 +49,6 @@ const Login: React.FC = () => {
 		e.preventDefault();
 
 		dispatch(onLoginThunk(user, 'login'));
-
-		const data = await auth(user, 'login');
-
-		if (data?.result) {
-			navigate('/courses');
-		}
 	};
 
 	return (

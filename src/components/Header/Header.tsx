@@ -1,21 +1,17 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { Button } from '../../common/Button';
 import { Logo } from './components/Logo';
 import { BUTTON_LOGOUT } from '../../constants';
 import { onLogoutThunk } from '../../store/user/thunk';
-import { useAppDispatch } from '../../store';
+import { selectUser, useAppDispatch } from '../../store';
 
 import './header.css';
 
-interface HeaderProps {
-	userName: string | undefined;
-}
-
-const Header: React.FC<HeaderProps> = ({ userName }) => {
-	const location = useLocation();
-	const navigate = useNavigate();
+const Header: React.FC = () => {
 	const dispatch = useAppDispatch();
+
+	const userName = useSelector(selectUser);
 
 	const logout = (): void => {
 		const token = localStorage.getItem('token');
@@ -23,27 +19,24 @@ const Header: React.FC<HeaderProps> = ({ userName }) => {
 		if (token) {
 			dispatch(onLogoutThunk(token));
 		}
-		navigate('/login');
 	};
 
 	const userBlock: JSX.Element = (
 		<>
-			<span>{userName}</span>
+			<span>{userName.name}</span>
 			<Button buttonText={BUTTON_LOGOUT} onButtonClick={logout} />
 		</>
 	);
 
 	return (
-		<header>
-			<div>
-				<Logo />
-			</div>
-			<div>
-				{location.pathname === '/registration' || location.pathname === '/login'
-					? null
-					: userBlock}
-			</div>
-		</header>
+		<>
+			<header>
+				<div>
+					<Logo />
+				</div>
+				<div>{userName.isAuth ? userBlock : null}</div>
+			</header>
+		</>
 	);
 };
 

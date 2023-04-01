@@ -8,9 +8,10 @@ import { Button } from '../../common/Button';
 import AuthorList from './components/AuthorList';
 import CourseAuthorList from './components/CourseAuthorList';
 import { dateGenerator, pipeDuration } from '../../helpers';
-import { addAuthorThunk } from '../../store/authors/thunk';
+import { addAuthorThunk, getAuthorsThunk } from '../../store/authors/thunk';
 import {
 	createCourseThunk,
+	getCoursesThunk,
 	updateCourseThunk,
 } from '../../store/courses/thunk';
 import { selectAuthors, selectCourses, useAppDispatch } from '../../store';
@@ -51,6 +52,11 @@ const CourseForm: React.FC = () => {
 	const dispatch = useAppDispatch();
 
 	const updateCourse = allCoursesList.find((course) => course.id === courseId);
+
+	useEffect(() => {
+		dispatch(getCoursesThunk());
+		dispatch(getAuthorsThunk());
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (!updateCourse) {

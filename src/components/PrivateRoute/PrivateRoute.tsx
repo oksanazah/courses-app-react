@@ -1,7 +1,6 @@
-import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Navigate, useLoaderData } from 'react-router-dom';
 
-import { selectUser } from '../../store';
+import { UserResponse } from '../../helpers';
 
 interface PrivateRouteProps {
 	children: React.ReactNode;
@@ -10,7 +9,8 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({
 	children,
 }): JSX.Element => {
-	const { role } = useSelector(selectUser);
+	const data = useLoaderData() as UserResponse;
+	const role = data.result.role;
 
 	if (role === 'admin') {
 		return <>{children}</>;
