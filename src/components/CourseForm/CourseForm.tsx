@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -39,7 +38,7 @@ const CourseForm: React.FC = () => {
 	const [inputTitle, setInputTitle] = useState<string>('');
 	const [inputDescription, setInputDescription] = useState<string>('');
 	const [inputDuration, setInputDuration] = useState<string>('');
-	const [newAuthor, setNewAuthor] = useState<Author>({ name: '', id: '' });
+	const [newAuthorName, setNewAuthorName] = useState<string>('');
 
 	const allAuthorList = useSelector(selectAuthors);
 	const allCoursesList = useSelector(selectCourses);
@@ -90,9 +89,9 @@ const CourseForm: React.FC = () => {
 		}
 
 		const newCourse: Course = {
-			id: uuidv4(),
-			title: inputTitle,
-			description: inputDescription,
+			id: '',
+			title: inputTitle.trim(),
+			description: inputDescription.trim(),
 			creationDate: dateGenerator(),
 			duration: Number(inputDuration),
 			authors: courseAuthorList.map((author: Author): string => author.id),
@@ -119,32 +118,30 @@ const CourseForm: React.FC = () => {
 		setInputDuration(value.trim());
 	};
 
-	const onDescriptionChange = (
-		e: React.ChangeEvent<HTMLTextAreaElement>
-	): void => {
-		const text: string = e.target.value;
-
-		setInputDescription(text.trim());
+	const onDescriptionChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLTextAreaElement>): void => {
+		setInputDescription(value);
 	};
 
 	const onTitleChange = ({
 		target: { value },
 	}: React.ChangeEvent<HTMLInputElement>): void => {
-		setInputTitle(value.trim());
+		setInputTitle(value);
 	};
 
 	const onAuthorChange = ({
 		target: { value },
 	}: React.ChangeEvent<HTMLInputElement>): void => {
-		const newAuthor: Author = {
-			id: uuidv4(),
-			name: value.trim(),
-		};
-		setNewAuthor(newAuthor);
+		setNewAuthorName(value);
 	};
 
 	const onCreateAuthor = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.preventDefault();
+		const newAuthor: Author = {
+			id: '',
+			name: newAuthorName.trim(),
+		};
 
 		if (!newAuthor.name || newAuthor.name.length < 2) {
 			return;
@@ -155,7 +152,7 @@ const CourseForm: React.FC = () => {
 		}
 
 		setAuthorList([...authorList, newAuthor]);
-		setNewAuthor({ name: '', id: '' });
+		setNewAuthorName('');
 	};
 
 	const addAuthor = useCallback(
@@ -228,7 +225,7 @@ const CourseForm: React.FC = () => {
 						placeholderText={AUTHOR_PLACEHOLDER}
 						onInputChange={onAuthorChange}
 						labelText={AUTHOR_LABEL}
-						inputText={newAuthor.name}
+						inputText={newAuthorName}
 					/>
 					<div className='create-author-button'>
 						<Button
