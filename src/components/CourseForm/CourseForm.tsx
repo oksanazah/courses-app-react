@@ -59,6 +59,7 @@ const CourseForm: React.FC = () => {
 
 	useEffect(() => {
 		if (!updateCourse) {
+			setAuthorList(allAuthorList);
 			return;
 		}
 
