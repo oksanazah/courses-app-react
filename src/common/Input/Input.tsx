@@ -1,11 +1,9 @@
-import { useState } from 'react';
-
 import './input.css';
 
 interface InputProps {
 	placeholderText: string;
 	inputId: string;
-	onInputChange: (text: string) => void;
+	onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	inputType?: string;
 	labelText?: string;
 	inputText?: string;
@@ -16,15 +14,9 @@ const Input: React.FC<InputProps> = ({
 	placeholderText,
 	inputId,
 	onInputChange,
+	inputText,
 	inputType = 'text',
 }) => {
-	const [inputText, setInputText] = useState<string>('');
-	const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		const text = e.target.value;
-		setInputText(text);
-		onInputChange(text);
-	};
-
 	return (
 		<>
 			<label htmlFor={inputId}>{labelText}</label>
@@ -35,7 +27,7 @@ const Input: React.FC<InputProps> = ({
 				name={inputId}
 				placeholder={placeholderText}
 				value={inputText}
-				onChange={onChange}
+				onChange={onInputChange}
 			/>
 		</>
 	);

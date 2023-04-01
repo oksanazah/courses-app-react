@@ -18,25 +18,27 @@ interface SearchBarParams {
 const SearchBar: React.FC<SearchBarParams> = ({ onSearch, onReset }) => {
 	const [inputText, setInputText] = useState<string>('');
 
-	const onInputChange = (inputText: string): void => {
-		setInputText(inputText);
-		onReset(inputText);
+	const onInputChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setInputText(value);
+		onReset(value);
 	};
 
-	const onButtonClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
+	const onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		onSearch(inputText);
 	};
 
 	return (
-		<div className='search'>
+		<form className='search' onSubmit={onSubmit}>
 			<Input
 				inputId={SEARCH_ID}
 				placeholderText={SEARCH_PLACEHOLDER}
 				onInputChange={onInputChange}
 			/>
-			<Button buttonText={BUTTON_SEARCH} onButtonClick={onButtonClick} />
-		</div>
+			<Button buttonText={BUTTON_SEARCH} />
+		</form>
 	);
 };
 

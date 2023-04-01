@@ -108,13 +108,15 @@ const CourseForm: React.FC = () => {
 		navigate('/courses');
 	};
 
-	const onDurationChange = (inputDuration: string): void => {
-		if (isNaN(Number(inputDuration))) {
+	const onDurationChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		if (isNaN(Number(value))) {
 			setInputDuration('');
 			return;
 		}
 
-		setInputDuration(inputDuration.trim());
+		setInputDuration(value.trim());
 	};
 
 	const onDescriptionChange = (
@@ -125,14 +127,18 @@ const CourseForm: React.FC = () => {
 		setInputDescription(text.trim());
 	};
 
-	const onTitleChange = (title: string): void => {
-		setInputTitle(title.trim());
+	const onTitleChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setInputTitle(value.trim());
 	};
 
-	const onAuthorChange = (author: string): void => {
+	const onAuthorChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
 		const newAuthor: Author = {
 			id: uuidv4(),
-			name: author.trim(),
+			name: value.trim(),
 		};
 		setNewAuthor(newAuthor);
 	};
@@ -149,6 +155,7 @@ const CourseForm: React.FC = () => {
 		}
 
 		setAuthorList([...authorList, newAuthor]);
+		setNewAuthor({ name: '', id: '' });
 	};
 
 	const addAuthor = useCallback(
@@ -221,6 +228,7 @@ const CourseForm: React.FC = () => {
 						placeholderText={AUTHOR_PLACEHOLDER}
 						onInputChange={onAuthorChange}
 						labelText={AUTHOR_LABEL}
+						inputText={newAuthor.name}
 					/>
 					<div className='create-author-button'>
 						<Button

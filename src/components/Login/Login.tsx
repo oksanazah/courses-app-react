@@ -35,12 +35,16 @@ const Login: React.FC = () => {
 		if (isAuth) navigate('/courses');
 	}, [isAuth, navigate]);
 
-	const onEmailChange = (email: string): void => {
-		setEmail(email);
+	const onEmailChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setEmail(value);
 	};
 
-	const onPasswordChange = (password: string): void => {
-		setPassword(password);
+	const onPasswordChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setPassword(value);
 	};
 
 	const onSubmit = async (
