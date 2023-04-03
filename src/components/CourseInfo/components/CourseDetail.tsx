@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-import { getAuthors } from '../../../store/authors/actionCreators';
 import { pipeDuration } from '../../../helpers';
-import { selectAuthors } from '../../../store';
+import { selectAuthors, useAppDispatch } from '../../../store';
+import { getAuthorsThunk } from '../../../store/authors/thunk';
 import type { Author } from '../../../helpers';
 
 interface CourseDetailProps {
@@ -20,11 +20,11 @@ interface CourseDetailProps {
 const CourseDetail: React.FC<CourseDetailProps> = ({
 	course: { title, description, id, duration, creationDate, authors },
 }) => {
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	const authorList: Author[] = useSelector(selectAuthors);
 
 	useEffect((): void => {
-		getAuthors().then((data) => dispatch(data));
+		dispatch(getAuthorsThunk());
 	}, [dispatch]);
 
 	return (

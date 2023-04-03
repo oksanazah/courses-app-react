@@ -1,27 +1,23 @@
-import { ON_LOGIN, ON_LOGOUT } from './actionTypes';
-import { auth } from '../../services';
-import type { User, AuthResponse } from '../../helpers';
+import { ON_LOGIN, ON_LOGOUT, ON_GET_USER } from './actionTypes';
+import type { AuthResponse, UserResponse } from '../../helpers';
 
-export const onLogin = async (
-	user: User,
-	url: string
-): Promise<{ type: string; payload: AuthResponse | undefined }> => {
-	const data = await auth(user, url);
+export const onLogin = (
+	data: AuthResponse | undefined
+): { type: string; payload: AuthResponse | undefined } => ({
+	type: ON_LOGIN,
+	payload: data,
+});
 
-	localStorage.setItem('token', `${data?.result}`);
-	localStorage.setItem('name', `${data?.user?.name}`);
+export const onLogout = (): { type: string } => ({
+	type: ON_LOGOUT,
+});
 
-	return {
-		type: ON_LOGIN,
-		payload: data,
-	};
-};
-
-export const onLogout = (): { type: string } => {
-	localStorage.removeItem('token');
-	localStorage.removeItem('name');
-
-	return {
-		type: ON_LOGOUT,
-	};
-};
+export const onGetUser = (
+	data: UserResponse | undefined
+): {
+	type: string;
+	payload: UserResponse | undefined;
+} => ({
+	type: ON_GET_USER,
+	payload: data,
+});

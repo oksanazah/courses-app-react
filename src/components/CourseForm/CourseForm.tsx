@@ -1,16 +1,19 @@
 import { useState, useCallback, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import Input from '../../common/Input';
 import { Button } from '../../common/Button';
 import AuthorList from './components/AuthorList';
 import CourseAuthorList from './components/CourseAuthorList';
 import { dateGenerator, pipeDuration } from '../../helpers';
-import { getAuthors, createAuthor } from '../../store/authors/actionCreators';
-import { createCourse } from '../../store/courses/actionCreators';
-import { selectAuthors } from '../../store';
+import { addAuthorThunk, getAuthorsThunk } from '../../store/authors/thunk';
+import {
+	createCourseThunk,
+	getCoursesThunk,
+	updateCourseThunk,
+} from '../../store/courses/thunk';
+import { selectAuthors, selectCourses, useAppDispatch } from '../../store';
 import type { Author, Course } from '../../helpers';
 import {
 	TITLE_ID,
@@ -23,29 +26,57 @@ import {
 	DURATION_LABEL,
 	DURATION_PLACEHOLDER,
 	BUTTON_CREATE,
+	BUTTON_UPDATE,
 	BUTTON_CREATE_AUTHOR,
 	DESCRIPTION_ID,
 	DESCRIPTION_PLACEHOLDER,
 } from '../../constants';
 
-import './create-course.css';
+import './course-form.css';
 
-const CreateCourse: React.FC = () => {
+const CourseForm: React.FC = () => {
 	const [inputTitle, setInputTitle] = useState<string>('');
 	const [inputDescription, setInputDescription] = useState<string>('');
 	const [inputDuration, setInputDuration] = useState<string>('');
-	const [newAuthor, setNewAuthor] = useState<Author>({ name: '', id: '' });
+	const [newAuthorName, setNewAuthorName] = useState<string>('');
 
 	const allAuthorList = useSelector(selectAuthors);
+	const allCoursesList = useSelector(selectCourses);
 	const [authorList, setAuthorList] = useState<Author[]>(allAuthorList);
 	const [courseAuthorList, setcourseAuthorList] = useState<Author[]>([]);
 
+	const token = localStorage.getItem('token');
+	const { courseId } = useParams();
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
+
+	const updateCourse = allCoursesList.find((course) => course.id === courseId);
 
 	useEffect(() => {
-		getAuthors().then((data) => dispatch(data));
+		dispatch(getCoursesThunk());
+		dispatch(getAuthorsThunk());
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (!updateCourse) {
+			setAuthorList(allAuthorList);
+			return;
+		}
+
+		setInputTitle(updateCourse.title);
+		setInputDescription(updateCourse.description);
+		setInputDuration(updateCourse.duration.toString());
+
+		setcourseAuthorList(
+			allAuthorList.filter((author) => updateCourse.authors.includes(author.id))
+		);
+
+		setAuthorList(
+			allAuthorList.filter(
+				(author) => !updateCourse.authors.includes(author.id)
+			)
+		);
+	}, [updateCourse, allAuthorList]);
 
 	const onCreateCourse = (): void => {
 		if (
@@ -59,60 +90,70 @@ const CreateCourse: React.FC = () => {
 		}
 
 		const newCourse: Course = {
-			id: uuidv4(),
-			title: inputTitle,
-			description: inputDescription,
+			id: '',
+			title: inputTitle.trim(),
+			description: inputDescription.trim(),
 			creationDate: dateGenerator(),
 			duration: Number(inputDuration),
 			authors: courseAuthorList.map((author: Author): string => author.id),
 		};
 
-		dispatch(createCourse(newCourse));
+		if (!updateCourse && token) {
+			dispatch(createCourseThunk(newCourse, token));
+		}
+		if (updateCourse && token && courseId) {
+			dispatch(updateCourseThunk(newCourse, courseId, token));
+		}
+
 		navigate('/courses');
 	};
 
-	const onDurationChange = (inputDuration: string): void => {
-		if (isNaN(Number(inputDuration))) {
+	const onDurationChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		if (isNaN(Number(value))) {
 			setInputDuration('');
 			return;
 		}
 
-		setInputDuration(inputDuration.trim());
+		setInputDuration(value.trim());
 	};
 
-	const onDescriptionChange = (
-		e: React.ChangeEvent<HTMLTextAreaElement>
-	): void => {
-		const text: string = e.target.value;
-
-		if (text.length < 2) {
-			return;
-		}
-
-		setInputDescription(text.trim());
+	const onDescriptionChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLTextAreaElement>): void => {
+		setInputDescription(value);
 	};
 
-	const onTitleChange = (title: string): void => {
-		setInputTitle(title.trim());
+	const onTitleChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setInputTitle(value);
 	};
 
-	const onAuthorChange = (author: string): void => {
-		const newAuthor: Author = {
-			id: uuidv4(),
-			name: author.trim(),
-		};
-		setNewAuthor(newAuthor);
+	const onAuthorChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setNewAuthorName(value);
 	};
 
 	const onCreateAuthor = (e: React.MouseEvent<HTMLButtonElement>): void => {
 		e.preventDefault();
+		const newAuthor: Author = {
+			id: '',
+			name: newAuthorName.trim(),
+		};
 
 		if (!newAuthor.name || newAuthor.name.length < 2) {
 			return;
 		}
 
-		dispatch(createAuthor(newAuthor));
+		if (token) {
+			dispatch(addAuthorThunk(newAuthor, token));
+		}
+
 		setAuthorList([...authorList, newAuthor]);
+		setNewAuthorName('');
 	};
 
 	const addAuthor = useCallback(
@@ -154,10 +195,14 @@ const CreateCourse: React.FC = () => {
 						placeholderText={TITLE_PLACEHOLDER}
 						onInputChange={onTitleChange}
 						labelText={TITLE_LABEL}
+						inputText={inputTitle}
 					/>
 				</div>
 				<div className='create-button'>
-					<Button buttonText={BUTTON_CREATE} onButtonClick={onCreateCourse} />
+					<Button
+						buttonText={updateCourse ? BUTTON_UPDATE : BUTTON_CREATE}
+						onButtonClick={onCreateCourse}
+					/>
 				</div>
 			</div>
 
@@ -169,6 +214,7 @@ const CreateCourse: React.FC = () => {
 					placeholder={DESCRIPTION_PLACEHOLDER}
 					onChange={onDescriptionChange}
 					rows={5}
+					value={inputDescription}
 				></textarea>
 			</div>
 
@@ -180,6 +226,7 @@ const CreateCourse: React.FC = () => {
 						placeholderText={AUTHOR_PLACEHOLDER}
 						onInputChange={onAuthorChange}
 						labelText={AUTHOR_LABEL}
+						inputText={newAuthorName}
 					/>
 					<div className='create-author-button'>
 						<Button
@@ -198,6 +245,7 @@ const CreateCourse: React.FC = () => {
 						placeholderText={DURATION_PLACEHOLDER}
 						onInputChange={onDurationChange}
 						labelText={DURATION_LABEL}
+						inputText={inputDuration}
 					/>
 					<div className='transform-duration'>
 						Duration: <span>{pipeDuration(Number(inputDuration))}</span> hours
@@ -213,4 +261,4 @@ const CreateCourse: React.FC = () => {
 	);
 };
 
-export default CreateCourse;
+export default CourseForm;

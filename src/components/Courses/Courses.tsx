@@ -6,23 +6,33 @@ import CourseCard from './components/CourseCard';
 import SearchBar from './components/SearchBar';
 import { Button } from '../../common/Button';
 import { BUTTON_ADD } from '../../constants';
-import { selectCourses, selectAuthors } from '../../store';
-import type { Course, Author } from '../../helpers';
+import { selectCourses, selectAuthors, selectUser } from '../../store';
+import { getCoursesThunk } from '../../store/courses/thunk';
+import { getAuthorsThunk } from '../../store/authors/thunk';
+import { useAppDispatch } from '../../store';
+import type { Course, Author, User } from '../../helpers';
 
 import './courses.css';
 
 const Courses: React.FC = () => {
 	const navigate = useNavigate();
+	const dispatch = useAppDispatch();
 	const [inputText, setInputText] = useState<string>('');
 
 	const courseList: Course[] = useSelector(selectCourses);
 	const authorList: Author[] = useSelector(selectAuthors);
+	const { isAuth }: User = useSelector(selectUser);
 
 	useEffect((): void => {
-		if (localStorage.getItem('token') === null) {
-			navigate('/login');
+		if (!isAuth) {
+			navigate('/');
 		}
-	}, [navigate]);
+	}, [navigate, isAuth]);
+
+	useEffect(() => {
+		dispatch(getCoursesThunk());
+		dispatch(getAuthorsThunk());
+	}, [dispatch]);
 
 	const onButtonClick = (): void => {
 		navigate('/courses/add');
@@ -39,10 +49,6 @@ const Courses: React.FC = () => {
 	};
 
 	const foundCourses: Course[] = useMemo<Course[]>((): Course[] => {
-		if (courseList.length === 0) {
-			navigate('/error');
-		}
-
 		if (inputText.length === 0) {
 			return courseList;
 		}
@@ -52,7 +58,7 @@ const Courses: React.FC = () => {
 				course.title.toLowerCase().indexOf(inputText.toLowerCase()) > -1 ||
 				course.id.toLowerCase().indexOf(inputText.toLowerCase()) > -1
 		);
-	}, [courseList, inputText, navigate]);
+	}, [courseList, inputText]);
 
 	return (
 		<div className='courses'>

@@ -1,73 +1,29 @@
 import { useEffect } from 'react';
-import {
-	BrowserRouter as Router,
-	Routes,
-	Route,
-	Navigate,
-} from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
 
 import Header from './components/Header';
-import Courses from './components/Courses';
-import CreateCourse from './components/CreateCourse';
-import CourseInfo from './components/CourseInfo';
-import Registration from './components/Registration';
-import Login from './components/Login/Login';
-import ErrorPage from './components/ErrorPage';
-import { getCourses } from './store/courses/actionCreators';
-import { getAuthors } from './store/authors/actionCreators';
-import { selectUser } from './store';
+import { getUserThunk } from './store/user/thunk';
+import { useAppDispatch } from './store';
+import { router } from './helpers';
 
 import './App.css';
 
 const App: React.FC = () => {
-	const dispatch = useDispatch();
-	const userName = useSelector(selectUser);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		const fetchCourses = async (): Promise<void> => {
-			const data = await getCourses();
+		const token = localStorage.getItem('token');
 
-			dispatch(data);
-		};
-
-		fetchCourses();
-	}, [dispatch]);
-
-	useEffect(() => {
-		const fetchAuthors = async (): Promise<void> => {
-			const data = await getAuthors();
-			dispatch(data);
-		};
-
-		fetchAuthors();
+		if (token) {
+			dispatch(getUserThunk(token));
+		}
 	}, [dispatch]);
 
 	return (
-		<Router>
-			<div className='app'>
-				<Header userName={userName.name} />
-				<Routes>
-					<Route
-						path='/'
-						element={
-							localStorage.getItem('token') === null ? (
-								<Navigate to={'/login'} />
-							) : (
-								<Navigate to={'/courses'} />
-							)
-						}
-					/>
-					?
-					<Route path='/courses/add' element={<CreateCourse />} />
-					<Route path='/courses' element={<Courses />} />
-					<Route path='/courses/:courseId' element={<CourseInfo />} />
-					<Route path='/registration' element={<Registration />} />
-					<Route path='/login' element={<Login />} />
-					<Route path='/error' element={<ErrorPage />} />
-				</Routes>
-			</div>
-		</Router>
+		<div className='app'>
+			<Header />
+			<RouterProvider router={router} />
+		</div>
 	);
 };
 

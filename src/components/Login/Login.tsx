@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Button } from '../../common/Button';
 import Input from '../../common/Input';
-import { onLogin } from '../../store/user/actionCreators';
+import { selectUser, useAppDispatch } from '../../store';
+import { onLoginThunk } from '../../store/user/thunk';
 import type { User } from '../../helpers';
 import {
 	USER_EMAIL_ID,
@@ -20,7 +21,8 @@ import './login.css';
 
 const Login: React.FC = () => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
+	const { isAuth }: User = useSelector(selectUser);
 
 	const [email, setEmail] = useState<string>('');
 	const [password, setPassword] = useState<string>('');
@@ -29,12 +31,20 @@ const Login: React.FC = () => {
 		password,
 	};
 
-	const onEmailChange = (email: string): void => {
-		setEmail(email);
+	useEffect(() => {
+		if (isAuth) navigate('/courses');
+	}, [isAuth, navigate]);
+
+	const onEmailChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setEmail(value);
 	};
 
-	const onPasswordChange = (password: string): void => {
-		setPassword(password);
+	const onPasswordChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setPassword(value);
 	};
 
 	const onSubmit = async (
@@ -42,12 +52,7 @@ const Login: React.FC = () => {
 	): Promise<void> => {
 		e.preventDefault();
 
-		const result = await onLogin(user, 'login');
-
-		if (result.payload) {
-			dispatch(result);
-			navigate('/courses');
-		}
+		dispatch(onLoginThunk(user, 'login'));
 	};
 
 	return (

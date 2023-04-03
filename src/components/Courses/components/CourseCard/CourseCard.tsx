@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Button } from '../../../../common/Button';
 import { BUTTON_SHOW } from '../../../../constants';
 import { pipeDuration } from '../../../../helpers';
-import { deleteCourse } from '../../../../store/courses/actionCreators';
+import { deleteCourseThunk } from '../../../../store/courses/thunk';
+import { useAppDispatch, selectUser } from '../../../../store';
 import type { Course } from '../../../../helpers';
 
 import './course-card.css';
@@ -17,15 +18,25 @@ interface CourseCardParams {
 const CourseCard: React.FC<CourseCardParams> = ({ course, authorNames }) => {
 	const { id, title, description, creationDate, duration } = course;
 	const authorString: string = authorNames.join(', ');
+
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
+	const user = useSelector(selectUser);
 
 	const showCourse = (): void => {
 		navigate(`/courses/${id}`);
 	};
 
 	const onDelete = (): void => {
-		dispatch(deleteCourse(id));
+		const token = localStorage.getItem('token');
+
+		if (token) {
+			dispatch(deleteCourseThunk(id, token));
+		}
+	};
+
+	const onUpdate = (): void => {
+		navigate(`/courses/update/${id}`);
 	};
 
 	return (
@@ -50,13 +61,18 @@ const CourseCard: React.FC<CourseCardParams> = ({ course, authorNames }) => {
 					</li>
 					<li className='btns'>
 						<Button buttonText={BUTTON_SHOW} onButtonClick={showCourse} />
-						<span className='btn-icons'>
-							<Button buttonText={<i className='fa-solid fa-pen'></i>} />
-							<Button
-								buttonText={<i className='fa-solid fa-trash'></i>}
-								onButtonClick={onDelete}
-							/>
-						</span>
+						{user.role === 'admin' ? (
+							<span className='btn-icons'>
+								<Button
+									buttonText={<i className='fa-solid fa-pen'></i>}
+									onButtonClick={onUpdate}
+								/>
+								<Button
+									buttonText={<i className='fa-solid fa-trash'></i>}
+									onButtonClick={onDelete}
+								/>
+							</span>
+						) : null}
 					</li>
 				</ul>
 			</div>

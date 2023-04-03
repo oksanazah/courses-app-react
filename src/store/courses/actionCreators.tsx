@@ -4,7 +4,6 @@ import {
 	CREATE_COURSE,
 	UPDATE_COURSE,
 } from './actionTypes';
-import { getCoursesList } from '../../services';
 import type { Course, CourseResponse } from '../../helpers';
 
 interface CourseAction {
@@ -12,18 +11,12 @@ interface CourseAction {
 	payload: Course[] | undefined;
 }
 
-export const getCourses = (): Promise<CourseAction> => {
-	const res = getCoursesList().then(
-		(data: CourseResponse): CourseAction => ({
-			type: GET_COURSES,
-			payload: data.result,
-		})
-	);
+export const getCourses = (data: CourseResponse): CourseAction => ({
+	type: GET_COURSES,
+	payload: data.result,
+});
 
-	return res;
-};
-
-export const deleteCourse = (
+export const deleteCourseAction = (
 	id: string
 ): { type: string; payload: string } => ({
 	type: DELETE_COURSE,
@@ -37,7 +30,7 @@ export const createCourse = (
 	payload: course,
 });
 
-export const updateCourse = (
+export const updateCourseAction = (
 	course: Course
 ): { type: string; payload: Course } => ({
 	type: UPDATE_COURSE,

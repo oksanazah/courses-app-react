@@ -31,16 +31,22 @@ const Registration: React.FC = () => {
 		password,
 	};
 
-	const onNameChange = (name: string): void => {
-		setName(name);
+	const onNameChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setName(value);
 	};
 
-	const onEmailChange = (email: string): void => {
-		setEmail(email);
+	const onEmailChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setEmail(value);
 	};
 
-	const onPasswordChange = (password: string): void => {
-		setPassword(password);
+	const onPasswordChange = ({
+		target: { value },
+	}: React.ChangeEvent<HTMLInputElement>): void => {
+		setPassword(value);
 	};
 
 	const onSubmit = async (

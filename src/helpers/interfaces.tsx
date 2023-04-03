@@ -18,6 +18,8 @@ interface User {
 	password?: string;
 	isAuth?: boolean;
 	token?: string;
+	id?: string;
+	role?: string;
 }
 
 interface UserState {
@@ -25,6 +27,7 @@ interface UserState {
 	name: string;
 	email: string;
 	token: string;
+	role: string;
 }
 
 interface AuthResponse {
@@ -32,6 +35,11 @@ interface AuthResponse {
 	successful: boolean;
 	user?: User;
 	errors?: string[];
+}
+
+interface UserResponse {
+	result: User;
+	successful: boolean;
 }
 
 interface CourseResponse {
@@ -49,13 +57,26 @@ interface AuthorResponse {
 	successful: boolean;
 }
 
+interface NewAuthorResponse {
+	result: Author;
+	successful: boolean;
+}
+
+interface DeleteResponse {
+	result?: string;
+	successful: boolean;
+}
+
 export {
 	Course,
 	Author,
 	User,
 	UserState,
+	UserResponse,
 	AuthResponse,
 	CourseResponse,
 	AuthorResponse,
+	NewAuthorResponse,
 	CourseInfoResponse,
+	DeleteResponse,
 };
