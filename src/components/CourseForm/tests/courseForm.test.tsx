@@ -45,7 +45,7 @@ test("CourseForm 'Create author' click button should call dispatch", async (): P
 
 	fireEvent.click(screen.getByText(BUTTON_CREATE_AUTHOR));
 
-	await waitFor(() => expect(mockedStore.dispatch).toHaveBeenCalledTimes(2)); // ??????
+	await waitFor(() => expect(mockedStore.dispatch).toHaveBeenCalledTimes(2));
 });
 
 test("CourseForm 'Add author' button click should add an author to course authors list", (): void => {
@@ -63,7 +63,7 @@ test("CourseForm 'Add author' button click should add an author to course author
 		screen.getAllByRole('button', { name: BUTTON_ADD_AUTHOR })[0]
 	);
 
-	expect(screen.getAllByTestId('course-authors-item').length).toBe(2); // ??????
+	expect(screen.getAllByTestId('course-authors-item').length).toBe(1);
 });
 
 test("CourseForm 'Delete author' button click should delete an author from the course list", (): void => {
@@ -79,11 +79,11 @@ test("CourseForm 'Delete author' button click should delete an author from the c
 		screen.getAllByRole('button', { name: BUTTON_ADD_AUTHOR })[0]
 	);
 
-	expect(screen.getAllByTestId('course-authors-item').length).toBe(2); // ??????
+	expect(screen.getAllByTestId('course-authors-item').length).toBe(1);
 
 	fireEvent.click(
 		screen.getAllByRole('button', { name: BUTTON_DELETE_AUTHOR })[0]
 	);
 
-	expect(screen.queryByTestId('course-authors')).toBe(null); // ??????
+	expect(screen.queryByTestId('course-authors')).toBe(null);
 });

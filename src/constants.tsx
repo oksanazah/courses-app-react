@@ -97,7 +97,7 @@ const mockedState = {
 			authors: ['author1', 'author3'],
 		},
 	],
-	authors: ['id1', 'id2'],
+	authors: [{ id: 'id1' }, { id: 'id2' }],
 };
 
 const mockedState2 = {
