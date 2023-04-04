@@ -14,7 +14,11 @@ const CourseAuthorList: React.FC<CourseAuthorListParams> = ({
 	const element: JSX.Element = (
 		<ul data-testid='course-authors'>
 			{courseAuthorList.map((author: Author) => (
-				<li key={author.id} className='author'>
+				<li
+					data-testid='course-authors-item'
+					key={author.id}
+					className='author'
+				>
 					{author.name}{' '}
 					<Button
 						buttonText={BUTTON_DELETE_AUTHOR}

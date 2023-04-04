@@ -1,14 +1,14 @@
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 
 import CourseForm from '../../CourseForm';
 import {
 	mockedState,
 	BUTTON_CREATE_AUTHOR,
 	BUTTON_ADD_AUTHOR,
-	mockedCoursesList,
+	BUTTON_DELETE_AUTHOR,
 } from '../../../constants';
 
 const mockedStore = {
@@ -29,56 +29,61 @@ test('CourseForm should show authors lists (all and course authors)', (): void =
 	);
 
 	expect(screen.getByTestId('all-authors')).not.toBeEmptyDOMElement();
+	expect(screen.getAllByTestId('all-authors-item').length).toBe(2);
 
-	// cant't mock opening on update route
-	// const mockedPath = mockedCoursesList[0].id;
-
-	// render(
-	// 	<Provider store={mockedStore}>
-	// 		<BrowserRouter>
-	// 			<Routes>
-	// 				<Route
-	// 					path={`/courses/update/${mockedPath}`}
-	// 					element={<CourseForm />}
-	// 				/>
-	// 			</Routes>
-	// 		</BrowserRouter>
-	// 	</Provider>
-	// );
-
-	// expect(screen.getByTestId('course-authors')).not.toBeEmptyDOMElement();
+	expect(screen.queryByTestId('course-authors')).toBe(null);
 });
 
-// can't call jest.fn() onclick
-// test("CourseForm 'Create author' click button should call dispatch", (): void => {
-// 	const dispatch = jest.fn();
+test("CourseForm 'Create author' click button should call dispatch", async (): Promise<void> => {
+	render(
+		<Provider store={mockedStore}>
+			<BrowserRouter>
+				<CourseForm />
+			</BrowserRouter>
+		</Provider>
+	);
 
-// 	render(
-// 		<Provider store={mockedStore}>
-// 			<BrowserRouter>
-// 				<CourseForm />
-// 			</BrowserRouter>
-// 		</Provider>
-// 	);
+	fireEvent.click(screen.getByText(BUTTON_CREATE_AUTHOR));
 
-// 	fireEvent.click(screen.getByText(BUTTON_CREATE_AUTHOR));
+	await waitFor(() => expect(mockedStore.dispatch).toHaveBeenCalledTimes(2)); // ??????
+});
 
-// 	expect(dispatch).toHaveBeenCalledTimes(1);
-// });
+test("CourseForm 'Add author' button click should add an author to course authors list", (): void => {
+	render(
+		<Provider store={mockedStore}>
+			<BrowserRouter>
+				<CourseForm />
+			</BrowserRouter>
+		</Provider>
+	);
 
-// test("CourseForm 'Add author' button click should add an author to course authors list", (): void => {
-// 	const onClick = jest.fn();
+	expect(screen.queryByTestId('course-authors')).toBe(null);
 
-// 	render(
-// 		<Provider store={mockedStore}>
-// 			<BrowserRouter>
-// 				<CourseForm />
-// 			</BrowserRouter>
-// 		</Provider>
-// 	);
+	fireEvent.click(
+		screen.getAllByRole('button', { name: BUTTON_ADD_AUTHOR })[0]
+	);
 
-// 	fireEvent.click(
-// 		screen.getAllByRole('button', { name: BUTTON_ADD_AUTHOR })[0]
-// 	);
-// 	expect(onClick).toHaveBeenCalledTimes(1);
-// });
+	expect(screen.getAllByTestId('course-authors-item').length).toBe(2); // ??????
+});
+
+test("CourseForm 'Delete author' button click should delete an author from the course list", (): void => {
+	render(
+		<Provider store={mockedStore}>
+			<BrowserRouter>
+				<CourseForm />
+			</BrowserRouter>
+		</Provider>
+	);
+
+	fireEvent.click(
+		screen.getAllByRole('button', { name: BUTTON_ADD_AUTHOR })[0]
+	);
+
+	expect(screen.getAllByTestId('course-authors-item').length).toBe(2); // ??????
+
+	fireEvent.click(
+		screen.getAllByRole('button', { name: BUTTON_DELETE_AUTHOR })[0]
+	);
+
+	expect(screen.queryByTestId('course-authors')).toBe(null); // ??????
+});
