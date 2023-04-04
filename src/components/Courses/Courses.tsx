@@ -68,7 +68,7 @@ const Courses: React.FC = () => {
 					<Button buttonText={BUTTON_ADD} onButtonClick={onButtonClick} />
 				</div>
 			</div>
-			<div>
+			<div data-testid='courses-container'>
 				{foundCourses.map((course: Course) => {
 					const authorNames: (string | null)[] = course.authors.map(
 						(author: string): string | null =>

@@ -1,6 +1,6 @@
 import { Navigate, useLoaderData } from 'react-router-dom';
 
-import { UserResponse } from '../../helpers';
+import type { UserResponse } from '../../helpers';
 
 interface PrivateRouteProps {
 	children: React.ReactNode;
