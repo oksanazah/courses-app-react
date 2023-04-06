@@ -74,6 +74,40 @@ const mockedAuthorsList = [
 	},
 ];
 
+const mockedState = {
+	user: {
+		isAuth: true,
+		name: 'Test Name',
+	},
+	courses: [
+		{
+			id: '1',
+			title: 'title',
+			description: 'description',
+			creationDate: '3/4/2023',
+			duration: 120,
+			authors: ['author', 'author2'],
+		},
+		{
+			id: '2',
+			title: 'title2',
+			description: 'description2',
+			creationDate: '3/4/2023',
+			duration: 90,
+			authors: ['author1', 'author3'],
+		},
+	],
+	authors: [{ id: 'id1' }, { id: 'id2' }],
+};
+
+const mockedState2 = {
+	user: {
+		isAuth: true,
+		name: 'Test Name',
+	},
+	courses: [],
+};
+
 export {
 	BUTTON_LOGOUT,
 	BUTTON_SHOW,
@@ -88,6 +122,8 @@ export {
 	BUTTON_LOGIN,
 	mockedCoursesList,
 	mockedAuthorsList,
+	mockedState,
+	mockedState2,
 	SEARCH_PLACEHOLDER,
 	SEARCH_ID,
 	TITLE_ID,

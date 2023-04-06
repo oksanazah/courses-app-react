@@ -9,9 +9,9 @@ interface AuthorListParams {
 
 const AuthorList: React.FC<AuthorListParams> = ({ addAuthor, authorList }) => {
 	const element: JSX.Element = (
-		<ul>
+		<ul data-testid='all-authors'>
 			{authorList.map((author: Author) => (
-				<li key={author.id} className='author'>
+				<li data-testid='all-authors-item' key={author.id} className='author'>
 					{author.name}{' '}
 					<Button
 						buttonText={BUTTON_ADD_AUTHOR}
